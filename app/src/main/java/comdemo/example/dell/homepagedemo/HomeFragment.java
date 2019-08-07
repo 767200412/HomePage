@@ -2,13 +2,10 @@ package comdemo.example.dell.homepagedemo;
 
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +39,7 @@ import comdemo.example.dell.homepagedemo.Beans.Platformarticleselected;
 import comdemo.example.dell.homepagedemo.Beans.Polymericcompanies;
 import comdemo.example.dell.homepagedemo.Beans.Topdata;
 import comdemo.example.dell.homepagedemo.adapter.RecycleviewAdapter;
+import comdemo.example.dell.homepagedemo.listener.EndlessRecyclerOnScrollListener;
 import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
 import comdemo.example.dell.homepagedemo.request.RequestCenter;
 import okhttp3.Response;
@@ -61,6 +59,7 @@ public class HomeFragment extends Fragment {
     private LinearLayout ls;
     private TextView tv;
     private ImageView imageView;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private android.support.design.widget.TabLayout mytab;
     private android.support.v7.widget.RecyclerView mRecyclerView;
     private List<String> mEntityList;//公司列表
@@ -70,7 +69,8 @@ public class HomeFragment extends Fragment {
     private comdemo.example.dell.homepagedemo.Beans.Banner banner2;
     private List<Header> headers;
     private Indextop indextop;
-    private List<Items> items,items2,items3,items4;
+    private List<Items> items,items2,items3;
+    private List<Items> items4 = new ArrayList<>();
     private Platformarticleselected platformarticleselected;
     private Menuitems menuitems;
     private Polymericcompanies polymericcompanies;
@@ -88,20 +88,10 @@ public class HomeFragment extends Fragment {
     //跳过的数据数
     private int skip = 0;
     //一次加载的数据量
-    private int take = 20;
+    private int take = 10;
 
     private List images = new ArrayList();//横向滚动广告数据集
     private List<String> messages = new ArrayList<>();//垂直滚动 跑马灯数据集
-
-    private Handler handler = new Handler(){
-        public void handleMessage(Message msg) {
-            switch (msg.what){
-                case DATA_GAT_SUCCESSS:
-                    initRecyclerView();
-                    break;
-            }
-        }
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -112,14 +102,27 @@ public class HomeFragment extends Fragment {
         banner = (Banner)view.findViewById(R.id.tv_ad);
         marqueeView = (MarqueeView)view.findViewById(R.id.tv_bottomNews);
         requestCenter = new RequestCenter(getContext());
+        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.n_scroll_view);
         mytab = (android.support.design.widget.TabLayout) view.findViewById(R.id.roll_tab);
         mRecyclerView = view.findViewById(R.id.review);
+
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //下拉刷新的圆圈是否显示
+                swipeRefreshLayout.setRefreshing(false);
+                //取消下拉刷新
+                swipeRefreshLayout.setEnabled(true);
+                swipeRefreshLayout.stopNestedScroll();
+            }
+        });
+
         init();
         initTab();
         skip = 0;
         // 设置布局管理器
         mRecyclerView.setLayoutManager(manager);
-
         initCompany();
 
 
@@ -154,33 +157,17 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
-                 //判断是当前layoutManager是否为LinearLayoutManager
-                 //只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
-                if (layoutManager instanceof LinearLayoutManager) {
-                    LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
-                    //获取最后一个可见view的位置
-                    int lastItemPosition = linearManager.findLastVisibleItemPosition();
-                    //获取第一个可见view的位置
-                    int firstItemPosition =linearManager.findFirstVisibleItemPosition();
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE && lastItemPosition + 1 == adapter.getItemCount()) {
-                        //最后一个itemView的position为adapter中最后一个数据时,说明该itemView就是底部的view了
-                        //需要注意position从0开始索引,adapter.getItemCount()是数据量总数
-                        new LoadDataThread().start();
-                    }
-                    //同理检测是否为顶部itemView时,只需要判断其位置是否为0即可
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE && firstItemPosition == 0) {}
-                }
-            }
 
+
+        mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+            public void onLoadMore() {
+                adapter.setLoadState(adapter.LOADING);
+                new LoadDataThread().start();
+                adapter.setLoadState(adapter.LOADING_COMPLETE);
             }
         });
+
 
         return view;
     }
