@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import comdemo.example.dell.homepagedemo.Beans.CategoryIdsByOr;
 import comdemo.example.dell.homepagedemo.Beans.Data;
 import comdemo.example.dell.homepagedemo.Beans.Header;
 import comdemo.example.dell.homepagedemo.Beans.Indextop;
@@ -69,6 +71,9 @@ public class HomeFragment extends Fragment {
     private Polymericcompanies polymericcompanies;
     private Pageinfo pageinfo;
 
+    private CategoryIdsByOr categoryIdsByOr;//用于标签分类的标识
+    private String categoryIdsByOrNumber;
+
     private List images = new ArrayList();//横向滚动广告数据集
     private List<String> messages = new ArrayList<>();//垂直滚动 跑马灯数据集
 
@@ -94,6 +99,18 @@ public class HomeFragment extends Fragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 //添加选中Tab的逻辑
+                String title = tab.getText().toString();
+                for(Items item:items3){
+                     if(item.getTitle().equals(title)){
+                         Gson gson = new Gson();
+                         categoryIdsByOr =gson.fromJson(item.getActionArgsJson(),CategoryIdsByOr.class);
+                         categoryIdsByOrNumber = categoryIdsByOr.getCategoryIdsByOr();
+                         Log.e("categoryIdsByOr",categoryIdsByOrNumber);
+                         //调用初始化
+                         initCompany();
+                     }
+                }
+
             }
 
             @Override
@@ -271,7 +288,8 @@ public class HomeFragment extends Fragment {
         JSONObject args = new JSONObject();
         try {
             params_banner3.put("query",url3);
-            args.put("categoryIdsByOr","bd5c1250-5a35-e711-80e4-da42ba972ebd");
+            //args.put("categoryIdsByOr","bd5c1250-5a35-e711-80e4-da42ba972ebd");
+            args.put("categoryIdsByOr",categoryIdsByOrNumber);
             args.put("verifyStatus","Pass");
             args.put("skip","0");
             args.put("take","10");
