@@ -26,6 +26,15 @@ public class RecycleviewAdapter extends RecyclerView.Adapter {
         this.mItemList = entityList;
     }
 
+    public void appendData(List<Items> data){
+        if (data != null && !data.isEmpty()) {
+
+            this.mItemList.addAll(data);
+
+            notifyDataSetChanged();
+        }
+    }
+
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

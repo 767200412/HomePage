@@ -2,10 +2,11 @@ package comdemo.example.dell.homepagedemo;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,17 @@ public class HomeFragment extends Fragment {
 
     private CategoryIdsByOr categoryIdsByOr;//用于标签分类的标识
     private String categoryIdsByOrNumber;
+    // 设置adapter
+    private RecycleviewAdapter adapter;
+
+    // 定义一个线性布局管理器
+    private LinearLayoutManager manager = new LinearLayoutManager(getContext());
+    //加载更多数据时最后一项的索引
+    private int lastLoadDataItemPosition;
+    //跳过的数据数
+    private int skip = 0;
+    //一次加载的数据量
+    private int take = 10;
 
     private List images = new ArrayList();//横向滚动广告数据集
     private List<String> messages = new ArrayList<>();//垂直滚动 跑马灯数据集
@@ -94,7 +106,13 @@ public class HomeFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.review);
         init();
         initTab();
+        skip = 0;
+        // 设置布局管理器
+        mRecyclerView.setLayoutManager(manager);
+
         initCompany();
+
+
         mytab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -105,9 +123,12 @@ public class HomeFragment extends Fragment {
                          Gson gson = new Gson();
                          categoryIdsByOr =gson.fromJson(item.getActionArgsJson(),CategoryIdsByOr.class);
                          categoryIdsByOrNumber = categoryIdsByOr.getCategoryIdsByOr();
-                         Log.e("categoryIdsByOr",categoryIdsByOrNumber);
+                        // Log.e("categoryIdsByOr",categoryIdsByOrNumber);
+                         skip = 0;
+                         take = 10;
                          //调用初始化
                          initCompany();
+
                      }
                 }
 
@@ -121,6 +142,34 @@ public class HomeFragment extends Fragment {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
                //再次选中tab的逻辑
+            }
+        });
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                 //判断是当前layoutManager是否为LinearLayoutManager
+                 //只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
+                if (layoutManager instanceof LinearLayoutManager) {
+                    LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
+                    //获取最后一个可见view的位置
+                    int lastItemPosition = linearManager.findLastVisibleItemPosition();
+                    //获取第一个可见view的位置
+                    int firstItemPosition =linearManager.findFirstVisibleItemPosition();
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE && lastItemPosition + 1 == adapter.getItemCount()) {
+                        //最后一个itemView的position为adapter中最后一个数据时,说明该itemView就是底部的view了
+                        //需要注意position从0开始索引,adapter.getItemCount()是数据量总数
+                        new LoadDataThread().start();
+                    }
+                    //同理检测是否为顶部itemView时,只需要判断其位置是否为0即可
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE && firstItemPosition == 0) {}
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
             }
         });
 
@@ -291,8 +340,8 @@ public class HomeFragment extends Fragment {
             //args.put("categoryIdsByOr","bd5c1250-5a35-e711-80e4-da42ba972ebd");
             args.put("categoryIdsByOr",categoryIdsByOrNumber);
             args.put("verifyStatus","Pass");
-            args.put("skip","0");
-            args.put("take","10");
+            args.put("skip",skip);
+            args.put("take",take);
             variables3.put("args",args);
             params_banner3.put("variables",variables3);
         } catch (JSONException e) {
@@ -314,9 +363,10 @@ public class HomeFragment extends Fragment {
                 data = topdata.getData();
                 polymericcompanies = data.getPolymericCompanies();
                 items4 = polymericcompanies.getItems();
-                if(items4 != null) {
+                if(items4 != null){
                     initRecyclerView();
                 }
+
             }
 
             @Override
@@ -333,8 +383,22 @@ public class HomeFragment extends Fragment {
         // 设置布局管理器
         mRecyclerView.setLayoutManager(manager);
         // 设置adapter
-        RecycleviewAdapter adapter = new RecycleviewAdapter(getContext(), items4);
+        if(adapter ==null) {
+            adapter = new RecycleviewAdapter(getContext(), items4);
+        }
+        else {
+            adapter.appendData(items4);
+        }
         mRecyclerView.setAdapter(adapter);
+    }
+
+    //下拉加载数据
+    class LoadDataThread extends Thread{
+        @Override
+        public void run() {
+            skip += 10;
+            initCompany();
+        }
     }
 
 
