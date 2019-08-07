@@ -2,6 +2,8 @@ package comdemo.example.dell.homepagedemo;
 
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -50,6 +52,8 @@ import okhttp3.Response;
  */
 public class HomeFragment extends Fragment {
 
+    public final int DATA_GAT_SUCCESSS = 1;
+
     private View view,view2;//定义view用来设置fragment的layout
     private Banner banner;
     private MarqueeView marqueeView;
@@ -84,14 +88,20 @@ public class HomeFragment extends Fragment {
     //跳过的数据数
     private int skip = 0;
     //一次加载的数据量
-    private int take = 10;
+    private int take = 20;
 
     private List images = new ArrayList();//横向滚动广告数据集
     private List<String> messages = new ArrayList<>();//垂直滚动 跑马灯数据集
 
-
-
-
+    private Handler handler = new Handler(){
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case DATA_GAT_SUCCESSS:
+                    initRecyclerView();
+                    break;
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -125,8 +135,7 @@ public class HomeFragment extends Fragment {
                          categoryIdsByOrNumber = categoryIdsByOr.getCategoryIdsByOr();
                         // Log.e("categoryIdsByOr",categoryIdsByOrNumber);
                          skip = 0;
-                         take = 10;
-                         //调用初始化
+                         //调用公司数据加载
                          initCompany();
 
                      }
@@ -318,20 +327,6 @@ public class HomeFragment extends Fragment {
     //加载公司数据
     public void initCompany(){
         String url3 = "query PolymericCompaniesQuery($args: PolymericCompanyListArgs) {  polymericCompanies(args: $args) {    __typename    pageInfo {      __typename      total      skip      take    }    items {      __typename      customSiteUrl      id      companySiteId      brandName      hasCompanySite      hasProducts      fcRecommendVisualizationSquareImgUrl      residentProvince      residentCity      logoUrl      verifyStatus      verifyStatusInt      isFavoriteByCurrMember      isFavoriteCompanyHomeByCurrMember      isFavoriteSiteByCurrMember      joinCategoriesHangyeCat      identities {        __typename        code        mark        isVerifyPass      }      memberFavorites {        __typename        id      }      categories {        __typename        name      }    }  }}";
-//        RequestParams variables3 = new RequestParams();
-//        RequestParams params_banner3 = new RequestParams();
-//        RequestParams args = new RequestParams();
-//        Gson gson = new Gson();
-//        params_banner3.put("query",url3);
-//        args.put("categoryIdsByOr","bd5c1250-5a35-e711-80e4-da42ba972ebd");
-//        args.put("verifyStatus","Pass");
-//        args.put("skip","0");
-//        args.put("take","10");
-//        variables3.put("args",args);
-//        String s = gson.toJson(variables3);
-//        params_banner3.put("variables",s);
-//        Log.e("args",variables3.urlParams.get("args"));
-//        Log.e("variables",params_banner3.urlParams.get("variables"));
         JSONObject params_banner3 = new JSONObject();
         JSONObject variables3 = new JSONObject();
         JSONObject args = new JSONObject();
@@ -363,10 +358,12 @@ public class HomeFragment extends Fragment {
                 data = topdata.getData();
                 polymericcompanies = data.getPolymericCompanies();
                 items4 = polymericcompanies.getItems();
+//                Message msg = new Message();
+//                msg.what=DATA_GAT_SUCCESSS ;
+//                handler.sendMessage(msg);
                 if(items4 != null){
                     initRecyclerView();
                 }
-
             }
 
             @Override
@@ -378,12 +375,12 @@ public class HomeFragment extends Fragment {
 
     //显示公司列表
     public void initRecyclerView(){
-        // 定义一个线性布局管理器
-        LinearLayoutManager manager = new LinearLayoutManager(getContext());
-        // 设置布局管理器
-        mRecyclerView.setLayoutManager(manager);
+//        // 定义一个线性布局管理器
+//        LinearLayoutManager manager = new LinearLayoutManager(getContext());
+//        // 设置布局管理器
+//        mRecyclerView.setLayoutManager(manager);
         // 设置adapter
-        if(adapter ==null) {
+        if(skip ==0) {
             adapter = new RecycleviewAdapter(getContext(), items4);
         }
         else {
@@ -393,13 +390,15 @@ public class HomeFragment extends Fragment {
     }
 
     //下拉加载数据
-    class LoadDataThread extends Thread{
+    class LoadDataThread extends Thread {
         @Override
         public void run() {
             skip += 10;
             initCompany();
         }
     }
+
+
 
 
 }
