@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background">
+    <LinearLayout
+        android:layout_gravity="top"
+        app:layout_collapseMode="pin"
+        android:id="@+id/linear_hear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/colorWhite">
+
+        <TextView
+            android:id="@+id/tv_clothes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="服装"
+            android:textColor="#ffff8f43"
+            android:textSize="24sp"
+            android:gravity="center"
+            android:padding="0dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="4dp"
+            android:layout_weight="6"/>
+
+        <TextView
+            android:id="@+id/tv_shoes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="0dp"
+            android:text="鞋"
+            android:textColor="#ff888888"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="13dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="3"/>
+
+        <EditText
+            android:id="@+id/edit_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@mipmap/nav_ic_search_g"
+            android:background="@drawable/edit_search_shape"
+            android:hint="搜索"
+            android:textColorHint="#ff999999"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="29dp"
+            android:drawablePadding="4dp"
+            android:paddingLeft="10dp"
+            android:layout_weight="24"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/ic_home_scan"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="12dp"/>
+    </LinearLayout>
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/background"
+                app:contentScrim="@color/colorWhite"
+                app:expandedTitleMarginBottom="393dp"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@color/background">
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorWhite">
+
+                        <com.youth.banner.Banner
+                            xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/tv_ad"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_marginBottom="12dp"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginRight="12dp"
+                            android:layout_marginTop="13dp"
+                            app:banner_default_image="@mipmap/ic_placeholder_success"
+                            android:scaleType="fitCenter"
+                            android:background="@drawable/ad_shape"
+                            app:layout_constraintBottom_toTopOf="@+id/guideline1"
+                            app:layout_constraintDimensionRatio="w,351:100"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tv_searchC"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="19dp"
+                            android:layout_marginTop="8dp"
+                            android:drawablePadding="10dp"
+                            android:drawableTop="@mipmap/ic_home_supplier"
+                            android:gravity="center"
+                            android:text="找企业"
+                            android:textColor="#ff232323"
+                            android:textSize="13sp"
+                            app:layout_constraintEnd_toStartOf="@+id/tv_product"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/guideline1" />
+
+                        <TextView
+                            android:id="@+id/tv_product"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="47dp"
+                            android:layout_marginTop="8dp"
+                            android:drawablePadding="10dp"
+                            android:drawableTop="@mipmap/ic_home_electronic_marketplace"
+                            android:gravity="center"
+                            android:text="产品"
+                            android:textColor="#ff232323"
+                            android:textSize="13sp"
+                            app:layout_constraintEnd_toStartOf="@+id/tv_news"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/tv_searchC"
+                            app:layout_constraintTop_toTopOf="@+id/guideline1" />
+
+                        <TextView
+                            android:id="@+id/tv_news"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="47dp"
+                            android:layout_marginTop="8dp"
+                            android:drawablePadding="10dp"
+                            android:drawableTop="@mipmap/ic_home_news"
+                            android:gravity="center"
+                            android:text="产品"
+                            android:textColor="#ff232323"
+                            android:textSize="13sp"
+                            app:layout_constraintEnd_toStartOf="@+id/tv_home_shopping_mall"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/tv_product"
+                            app:layout_constraintTop_toTopOf="@+id/guideline1" />
+
+                        <TextView
+                            android:id="@+id/tv_home_shopping_mall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="47dp"
+                            android:layout_marginRight="21dp"
+                            android:layout_marginTop="8dp"
+                            android:drawablePadding="10dp"
+                            android:drawableTop="@mipmap/ic_home_shopping_mall"
+                            android:gravity="center"
+                            android:text="商城商会"
+                            android:textColor="#ff232323"
+                            android:textSize="13sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/tv_news"
+                            app:layout_constraintTop_toTopOf="@+id/guideline1" />
+
+                        <android.support.constraint.Guideline
+                            android:id="@+id/guideline1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_percent="0.48" />
+
+                        <TextView
+                            android:id="@+id/tv_t1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginTop="21dp"
+                            android:layout_marginBottom="0dp"
+                            android:background="@mipmap/fccn_news_main"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_searchC"
+                            app:layout_constraintRight_toLeftOf="@+id/tv_t2"/>
+                        <android.support.constraint.Guideline
+                            android:id="@+id/guideline2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.25" />
+                        <TextView
+                            android:id="@+id/tv_t2"
+                            android:layout_width="1dp"
+                            android:layout_height="15dp"
+                            android:layout_marginLeft="9dp"
+                            android:layout_marginTop="24dp"
+                            android:background="#D8D8D8"
+                            app:layout_constraintLeft_toRightOf="@+id/guideline2"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_searchC"
+                            app:layout_constraintRight_toLeftOf="@+id/guideline2"/>
+
+                        <com.sunfusheng.marqueeview.MarqueeView
+                            android:id="@+id/tv_bottomNews"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="21dp"
+                            app:mvAnimDuration="1000"
+                            app:mvDirection="bottom_to_top"
+                            app:mvInterval="3000"
+                            app:mvTextColor="#ff8a8a8a"
+                            app:mvTextSize="14sp"
+                            app:mvSingleLine="true"
+                            app:mvGravity = "left"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintLeft_toRightOf="@+id/tv_t2"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_searchC" />
+
+                    </android.support.constraint.ConstraintLayout>
+
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:background="@color/colorWhite">
+
+
+                        <TextView
+                            android:id="@+id/textView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="80dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:text="推荐"
+                            android:textColor="#ffff8f43"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="品牌"
+                            android:textColor="#000000"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="@+id/textView"
+                            app:layout_constraintStart_toEndOf="@+id/textView"
+                            app:layout_constraintTop_toTopOf="@+id/textView" />
+
+                        <TextView
+                            android:id="@+id/textView3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="0dp"
+                            android:layout_marginBottom="3dp"
+                            android:layout_marginEnd="24dp"
+                            android:layout_marginTop="5dp"
+                            android:text="更多"
+                            android:textColor="#ff666666"
+                            android:textSize="12sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/textView2"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/textView2" />
+
+                        <ImageView
+                            android:id="@+id/textView4"
+                            android:layout_width="12dp"
+                            android:layout_height="12dp"
+                            android:layout_marginBottom="2dp"
+                            android:layout_marginTop="3dp"
+                            android:background="@mipmap/ic_arrow_left_micro"
+                            android:scaleType="fitCenter"
+                            app:layout_constraintBottom_toBottomOf="@+id/textView3"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/textView3"
+                            app:layout_constraintTop_toTopOf="@+id/textView3"/>
+
+                        <HorizontalScrollView
+                            android:id="@+id/hs"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorWhite"
+                            android:scrollbars="none"
+                            android:layout_marginBottom="5dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/textView">
+
+                            <LinearLayout
+                                android:id="@+id/liner"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                            </LinearLayout>
+
+                        </HorizontalScrollView>
+                    </android.support.constraint.ConstraintLayout>
+                </LinearLayout>
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/colorWhite"
+                android:layout_marginTop="8dp">
+                <android.support.design.widget.TabLayout
+                    android:id="@+id/roll_tab"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="296"
+                    app:tabTextColor="#ff000000"
+                    app:tabSelectedTextColor="#ffff8f43"
+                    app:tabIndicatorColor="#ffff8f43"
+                    app:tabIndicatorHeight="1dp"
+                    app:tabMode="scrollable"
+                    app:tabIndicatorFullWidth="false">
+
+                </android.support.design.widget.TabLayout>
+
+                <TextView
+                    android:layout_width="1dp"
+                    android:layout_height="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="#D8D8D8"
+                    android:layout_weight="1"/>
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="21dp"
+                    android:layout_marginTop="13dp"
+                    android:layout_marginBottom="13dp"
+                    android:text="筛选"
+                    android:gravity="center"
+                    android:padding="0dp"
+                    android:textColor="#ff232323"
+                    android:textSize="15sp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_weight="30"/>
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@mipmap/nav_ic_screening_black"
+                    android:scaleType="fitCenter"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginTop="13dp"
+                    android:layout_marginBottom="13dp"
+                    android:layout_weight="22"/>
+            </LinearLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/n_scroll_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/review"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </android.support.v7.widget.RecyclerView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:background="@color/colorWhite"/>
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</LinearLayout>
+
