@@ -20,7 +20,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".Ui.LoginPage.MainLoginActivity" />
         <activity android:name=".Ui.LoginPage.Register" />
         <activity android:name=".Ui.LoginPage.MessageVerification" />
@@ -28,7 +27,8 @@
         <activity android:name=".Ui.LoginPage.ReallyName" />
         <activity android:name=".Ui.LoginPage.VerificationLog" />
         <activity android:name=".Ui.LoginPage.FindPassword" />
-        <activity android:name=".Ui.LoginPage.NewPassword"/>
+        <activity android:name=".Ui.LoginPage.NewPassword" />
+        <activity android:name=".Ui.LoginPage.ForgetVeriyActivity"></activity>
     </application>
 
 </manifest>

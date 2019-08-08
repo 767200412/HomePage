@@ -17,6 +17,7 @@ public class FindPassword extends AppCompatActivity {
     private EditText mEditPhoneNumber;
     private Button mButtonLog;
     private ImageView mIvExit;
+    private String phone;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +27,7 @@ public class FindPassword extends AppCompatActivity {
         mIvExit = (ImageView)findViewById(R.id.imageView4);
 
         Intent intent = getIntent();//声明一个对象，并获得跳转过来的Intent对象
-        String phone = intent.getStringExtra("phone");//从intent对象中获得数据
+        phone = intent.getStringExtra("phone");//从intent对象中获得数据
         mEditPhoneNumber.setText(phone);
 
         if(mEditPhoneNumber.getText().toString().equals("")) {

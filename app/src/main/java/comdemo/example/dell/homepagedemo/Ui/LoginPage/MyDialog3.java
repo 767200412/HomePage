@@ -2,7 +2,7 @@ package comdemo.example.dell.homepagedemo.Ui.LoginPage;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
@@ -26,13 +26,14 @@ public class MyDialog3 extends Dialog {
     //private TextView titleTV;//消息标题文本
     //private TextView message;//消息提示文本
     private EditText editText;
-    private Drawable bitmap;//消息图片
+    private Bitmap bitmap;//消息图片
     //private String titleStr;//从外界设置的title文本
     //private String messageStr;//从外界设置的消息文本
     //确定文本和取消文本的显示的内容
     private String yesStr, noStr;
     private onNoOnclickListener noOnclickListener;//取消按钮被点击了的监听器
     private onYesOnclickListener yesOnclickListener;//确定按钮被点击了的监听器
+    private onImageOnclickListener imageOnclickListener;//确定按钮被点击了的监听器
 
     public MyDialog3(@NonNull Context context, @StyleRes int themeResId) {
         super(context, themeResId);
@@ -64,11 +65,21 @@ public class MyDialog3 extends Dialog {
         this.yesOnclickListener = yesOnclickListener;
     }
 
-    public Drawable getBitmap() {
+    /**
+     * 设置图片的显示内容和监听
+     *
+     * @param imageOnclickListener
+     */
+    public void setImageOnclickListener(onImageOnclickListener imageOnclickListener) {
+
+        this.imageOnclickListener = imageOnclickListener;
+    }
+
+    public Bitmap getBitmap() {
         return bitmap;
     }
 
-    public void setBitmap(Drawable sbitmap) {
+    public void setBitmap(Bitmap sbitmap) {
         bitmap = sbitmap;
         Log.d("setBitmap","设置验证码");
     }
@@ -116,7 +127,7 @@ public class MyDialog3 extends Dialog {
         }
         */
         if(bitmap !=null){
-            imageView.setImageDrawable(bitmap);
+            imageView.setImageBitmap(bitmap);
         }
         //如果设置按钮文字
         if (yesStr != null) {
@@ -146,6 +157,16 @@ public class MyDialog3 extends Dialog {
             public void onClick(View v) {
                 if (noOnclickListener != null) {
                     noOnclickListener.onNoClick();
+                }
+            }
+        });
+
+        //图片被点击之后。向外界提供监听
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ( imageOnclickListener != null) {
+                    imageOnclickListener.onImageOnclick();
                 }
             }
         });
@@ -187,5 +208,9 @@ public class MyDialog3 extends Dialog {
 
     public interface onYesOnclickListener {
         public void onYesOnclick();
+    }
+
+    public interface onImageOnclickListener {
+        public void onImageOnclick();
     }
 }

@@ -20,9 +20,9 @@ android {
             buildConfigField "boolean", "LOG_DEBUG", "true"//是否输出LOG信息
         }
     }
-    sourceSets{
-        main{
-            res.srcDirs=
+    sourceSets {
+        main {
+            res.srcDirs =
                     [
                             'src/main/res/layout/HomePage',
                             'src/main/res/layout/Login',

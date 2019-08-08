@@ -1,6 +1,8 @@
 package comdemo.example.dell.homepagedemo.Ui.LoginPage;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -23,7 +25,19 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import comdemo.example.dell.homepagedemo.Beans.ResponseMessage;
 import comdemo.example.dell.homepagedemo.R;
+import comdemo.example.dell.homepagedemo.Ui.MainPage.MainActivity;
+import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
+import comdemo.example.dell.homepagedemo.request.RequestCenter;
+import okhttp3.Response;
 
 public class MainLoginActivity extends AppCompatActivity {
 
@@ -42,12 +56,20 @@ public class MainLoginActivity extends AppCompatActivity {
     private String url = "http://devapi.fccn.cc/Api/v1.1/Account/Login";
     private String TAG = "Success";
     private int flag = 0;
+    private RequestCenter requestCenter ;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private Gson gson = new Gson();
+    private ResponseMessage responseMessage;
+    private int count;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_login);
         //初始化
+        requestCenter = new RequestCenter(this);
         mEditTextPhoneNumber = (EditText)findViewById(R.id.et_PhoneNumber);
         mEditTextPassword = (EditText)findViewById(R.id.et_PassWord);
         mButtonLog = (Button)findViewById(R.id.bt_log);
@@ -159,12 +181,10 @@ public class MainLoginActivity extends AppCompatActivity {
 
                 phoneNumber = mEditTextPhoneNumber.getText().toString().replaceAll(" ","");
                 passWord = mEditTextPassword.getText().toString();
-                Log.d("phoneNumber",phoneNumber);
-                Log.d("passWord",passWord);
+                //Log.d("phoneNumber",phoneNumber);
+                //Log.d("passWord",passWord);
 
-                //login(phoneNumber,passWord);
-                //Log.d("flag",String.valueOf(flag));
-
+                login();
             }
         });
 
@@ -265,6 +285,70 @@ public class MainLoginActivity extends AppCompatActivity {
 
 
     //登录login
+    private void login(){
+        JSONObject param_log = new JSONObject();
+        try {
+            param_log.put("Account",phoneNumber);
+            param_log.put("Password",passWord);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        requestCenter.Login(param_log, new DisposeDataListener() {
+            @Override
+            public void onSuccess(Response responseObj) {
+                int code = responseObj.code();
+                String result = null;
+                try {
+                    result = responseObj.body().string();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if(code == 200) {
+                    //状态码200 登录成功
+
+                    //步骤1：创建一个SharedPreferences对象
+                    sharedPreferences = getSharedPreferences("LoginData", Context.MODE_PRIVATE);
+                    //步骤2： 实例化SharedPreferences.Editor对象
+                    editor = sharedPreferences.edit();
+                    if (result != null) {
+                        responseMessage = gson.fromJson(result, ResponseMessage.class);
+                    }
+                    //步骤3：将获取过来的值放入文件
+                    editor.putString("id", responseMessage.getId());
+                    //步骤4：提交
+                    editor.commit();
+                    //登录成功 跳转到主页
+                    Intent intent = new Intent(MainLoginActivity.this,MainActivity.class);
+                    startActivity(intent);
+                }
+                else if(code == 400){
+                    //状态码400：账号或者密码错误
+                    //错误的次数
+                    Log.d("登录失败", String.valueOf(code));
+                    count++;
+
+                    if (count >= 0 && count < 5) {
+                          SomeWrongDialog();
+                      } else if (count == 5) {
+                        //计数重置
+                          count =0;
+                          FindPassWordDialog();
+                      }
+                    }
+
+
+            }
+
+            @Override
+            public void onFailure(Object responseObj) {
+
+            }
+        });
+
+
+
+
+    }
 
 }
 
