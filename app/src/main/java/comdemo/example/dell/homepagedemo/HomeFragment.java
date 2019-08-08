@@ -38,6 +38,7 @@ import comdemo.example.dell.homepagedemo.Beans.Pageinfo;
 import comdemo.example.dell.homepagedemo.Beans.Platformarticleselected;
 import comdemo.example.dell.homepagedemo.Beans.Polymericcompanies;
 import comdemo.example.dell.homepagedemo.Beans.Topdata;
+import comdemo.example.dell.homepagedemo.Utils.GlideImageLoader;
 import comdemo.example.dell.homepagedemo.adapter.RecycleviewAdapter;
 import comdemo.example.dell.homepagedemo.listener.EndlessRecyclerOnScrollListener;
 import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
@@ -384,8 +385,6 @@ public class HomeFragment extends Fragment {
             initCompany();
         }
     }
-
-
 
 
 }

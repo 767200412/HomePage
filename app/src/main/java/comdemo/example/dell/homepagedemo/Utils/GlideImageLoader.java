@@ -1,4 +1,4 @@
-package comdemo.example.dell.homepagedemo;
+package comdemo.example.dell.homepagedemo.Utils;
 
 import android.content.Context;
 import android.widget.ImageView;
