@@ -5,7 +5,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Ui.MainPage.MainActivity"
+    tools:context=".ui.mainPage.MainActivity"
     android:background="#fff5f5f5">
 
     <LinearLayout

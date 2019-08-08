@@ -5,8 +5,8 @@ import android.content.Context;
 
 import org.json.JSONObject;
 
-import comdemo.example.dell.homepagedemo.Beans.ResponseMessage;
-import comdemo.example.dell.homepagedemo.Beans.Topdata;
+import comdemo.example.dell.homepagedemo.beans.ResponseMessage;
+import comdemo.example.dell.homepagedemo.beans.Topdata;
 import comdemo.example.dell.homepagedemo.constant.HttpConstant;
 import comdemo.example.dell.homepagedemo.okhttp.CommonOkHttpClient;
 import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataHandle;

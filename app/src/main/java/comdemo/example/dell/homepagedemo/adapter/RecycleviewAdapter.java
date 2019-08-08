@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-import comdemo.example.dell.homepagedemo.Beans.Items;
+import comdemo.example.dell.homepagedemo.beans.Items;
 import comdemo.example.dell.homepagedemo.R;
 
 public class RecycleviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
