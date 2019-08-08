@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import comdemo.example.dell.homepagedemo.R;
+import comdemo.example.dell.homepagedemo.utils.SomeMonitorEditText;
 
 public class Password extends AppCompatActivity {
     private ImageButton mImageBtn;
@@ -27,13 +28,8 @@ public class Password extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_password);
-        mEditTextPassword = (EditText)findViewById(R.id.et_PassWord);
-        mButtonLog = (Button)findViewById(R.id.bt_log);
-        mImageBtn = (ImageButton)findViewById(R.id.imageButton);
-        mImageBtn2 = (ImageButton)findViewById(R.id.imageButton2);
-        Intent intent = getIntent();//声明一个对象，并获得跳转过来的Intent对象
-        phoneNumber = intent.getStringExtra("phone");//从intent对象中获得数据
-        edit = intent.getStringExtra("verifyCode");
+        //初始化
+        init();
 
         //限制按钮激活
         new SomeMonitorEditText().SetMonitorEditText(mButtonLog, mEditTextPassword);
@@ -54,6 +50,7 @@ public class Password extends AppCompatActivity {
             }
         });
 
+        //确认/下一步按钮
         mButtonLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,11 +64,23 @@ public class Password extends AppCompatActivity {
             }
         });
 
+        //退出界面
         mImageBtn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+    }
+
+    //初始化
+    public void init(){
+        mEditTextPassword = (EditText)findViewById(R.id.et_PassWord);
+        mButtonLog = (Button)findViewById(R.id.bt_log);
+        mImageBtn = (ImageButton)findViewById(R.id.imageButton);
+        mImageBtn2 = (ImageButton)findViewById(R.id.imageButton2);
+        Intent intent = getIntent();//声明一个对象，并获得跳转过来的Intent对象
+        phoneNumber = intent.getStringExtra("phone");//从intent对象中获得数据
+        edit = intent.getStringExtra("verifyCode");
     }
 }

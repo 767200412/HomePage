@@ -28,6 +28,10 @@ import comdemo.example.dell.homepagedemo.beans.ResponseMessage;
 import comdemo.example.dell.homepagedemo.R;
 import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
 import comdemo.example.dell.homepagedemo.request.RequestCenter;
+import comdemo.example.dell.homepagedemo.ui.dialog.MyDialog;
+import comdemo.example.dell.homepagedemo.ui.dialog.MyDialog2;
+import comdemo.example.dell.homepagedemo.ui.dialog.MyDialog3;
+import comdemo.example.dell.homepagedemo.utils.SomeMonitorEditText;
 import okhttp3.Response;
 
 
@@ -53,16 +57,8 @@ public class Register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        mTvUrl = (TextView)findViewById(R.id.tv_URL);
-        mTvLog = (TextView)findViewById(R.id.textView10);
-        mBtnNext = (Button)findViewById(R.id.bt_log);
-        mEtNumber = (EditText)findViewById(R.id.et_PhoneNumber);
-        mIvExit = (ImageView)findViewById(R.id.imageView4);
-        requestCenter = new RequestCenter(this);
 
-
-        //限制按钮激活
-        new SomeMonitorEditText().SetMonitorEditText(mBtnNext, mEtNumber);
+        init();
 
         //跳转到登录界面
         mTvLog.setOnClickListener(new View.OnClickListener() {
@@ -73,51 +69,7 @@ public class Register extends AppCompatActivity {
             }
         });
 
-//        //点击下一步
-//        mBtnNext.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String phoneNumber = mEtNumber.getText().toString().replaceAll(" ", "");
-//                //
-//                final Map<String, String> map = new HashMap<String, String>();
-//                map.put("PhoneRegionCode", "+86");
-//                map.put("PhoneNumber", phoneNumber);
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        String url = "http://devapi.fccn.cc/Api/v1.1/Account/HasAccountByPhoneNumber";
-//                        Gson gson = new Gson();
-//                        String json = gson.toJson(map);
-//                        OkHttpUtils okHttpUtils= new OkHttpUtils();
-//                        String result = okHttpUtils.postSyncInfo(url,json);
-//                        Log.d("结果",result);
-//                        if(result.equals("false"))
-//                        {
-//                            //此手机号 还未注册
-//                            //获取图形验证码
-//                            Log.d("图片","获取图形验证码");
-//                            url = "http://devapi.fccn.cc/Api/v1.1/VerifyCode/ImgRanNO/a";
-//                            Log.d("url",url);
-//                            Drawable d = okHttpUtils.getSync(url);
-//                            //Bitmap bit = Glide.with(getBaseContext()).load(url);
-//                            Log.d("图片", String.valueOf(d));
-//
-//
-//                            Message msg = new Message();
-//                            msg.what = 1;
-//                            msg.obj = d;
-//                            uiHandler.sendMessage(msg);
-//                        }
-//                    }
-//                }).start();
-//
-//
-//
-//
-//            }
-//        });
 
-        //点击下一步
         mBtnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,6 +110,7 @@ public class Register extends AppCompatActivity {
             }
         });
 
+        //退出界面
         mIvExit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,6 +120,19 @@ public class Register extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    //初始化
+    private void init(){
+        mTvUrl = (TextView)findViewById(R.id.tv_URL);
+        mTvLog = (TextView)findViewById(R.id.textView10);
+        mBtnNext = (Button)findViewById(R.id.bt_log);
+        mEtNumber = (EditText)findViewById(R.id.et_PhoneNumber);
+        mIvExit = (ImageView)findViewById(R.id.imageView4);
+        requestCenter = new RequestCenter(this);
+
+        //限制按钮激活
+        new SomeMonitorEditText().SetMonitorEditText(mBtnNext, mEtNumber);
 
         //设置《辅城用户注册协议》超链接
         SpannableStringBuilder ssb = new SpannableStringBuilder("注册即代表您同意《辅城用户注册协议》");
@@ -175,9 +141,8 @@ public class Register extends AppCompatActivity {
         mTvUrl.setText(ssb);
         // 在单击链接时凡是有要执行的动作，都必须设置MovementMethod对象
         mTvUrl.setMovementMethod(LinkMovementMethod.getInstance());
-       // 设置点击后的颜色，这里涉及到ClickableSpan的点击背景
+        // 设置点击后的颜色，这里涉及到ClickableSpan的点击背景
         mTvUrl.setHighlightColor(0xff8FABCC);
-
     }
     //已经有账号的提示框
     private void hasAccountDialog(){

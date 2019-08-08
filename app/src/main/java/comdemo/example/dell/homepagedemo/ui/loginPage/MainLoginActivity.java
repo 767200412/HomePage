@@ -32,11 +32,14 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import comdemo.example.dell.homepagedemo.beans.ResponseMessage;
 import comdemo.example.dell.homepagedemo.R;
-import comdemo.example.dell.homepagedemo.ui.mainPage.MainActivity;
+import comdemo.example.dell.homepagedemo.beans.ResponseMessage;
 import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
 import comdemo.example.dell.homepagedemo.request.RequestCenter;
+import comdemo.example.dell.homepagedemo.ui.dialog.MyDialog;
+import comdemo.example.dell.homepagedemo.ui.dialog.MyDialog2;
+import comdemo.example.dell.homepagedemo.ui.mainPage.MainActivity;
+import comdemo.example.dell.homepagedemo.utils.SomeMonitorEditText;
 import okhttp3.Response;
 
 public class MainLoginActivity extends AppCompatActivity {
@@ -51,12 +54,8 @@ public class MainLoginActivity extends AppCompatActivity {
     private MyDialog myDialog;
     private MyDialog2 myDialog2;
     private TextView mTvReg,mTvLog,mTvForget;
-    private int wrongNumber =0;
     private String phoneNumber,passWord;
-    private String url = "http://devapi.fccn.cc/Api/v1.1/Account/Login";
-    private String TAG = "Success";
-    private int flag = 0;
-    private RequestCenter requestCenter ;
+    private RequestCenter requestCenter ;//请求中心
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private Gson gson = new Gson();
@@ -69,34 +68,12 @@ public class MainLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_login);
         //初始化
-        requestCenter = new RequestCenter(this);
-        mEditTextPhoneNumber = (EditText)findViewById(R.id.et_PhoneNumber);
-        mEditTextPassword = (EditText)findViewById(R.id.et_PassWord);
-        mButtonLog = (Button)findViewById(R.id.bt_log);
-        mImageBtn = (ImageButton)findViewById(R.id.imageButton);
-        mImageBtn2 = (ImageButton)findViewById(R.id.imageView4);
-        mTvReg = (TextView)findViewById(R.id.textView11);
-        mTvLog = (TextView)findViewById(R.id.textView7);
-        mTvForget = (TextView)findViewById(R.id.textView5);
-
-        //设置输入框的提示字符hint
-        // 新建一个可以添加属性的文本对象
-        SpannableString ss = new SpannableString("请输入手机号");
-        SpannableString ss2 = new SpannableString("请输入密码");
-        // 新建一个属性对象,设置文字的大小
-        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(20,true);
-        AbsoluteSizeSpan ass2 = new AbsoluteSizeSpan(20,true);
-        // 附加属性到文本
-        ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss2.setSpan(ass2, 0, ss2.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        // 设置hint
-        mEditTextPhoneNumber.setHint(new SpannedString(ss)); // 一定要进行转换,否则属性会消失
-        mEditTextPassword.setHint(new SpannableString(ss2));
+        init();
 
         //限制按钮激活
         new SomeMonitorEditText().SetMonitorEditText(mButtonLog, mEditTextPassword,mEditTextPhoneNumber);
 
-        //关键部分:自动分隔手机号码通过addTextChangedListener()实现
+        //自动分隔手机号码，通过addTextChangedListener()实现
         mEditTextPhoneNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -181,9 +158,6 @@ public class MainLoginActivity extends AppCompatActivity {
 
                 phoneNumber = mEditTextPhoneNumber.getText().toString().replaceAll(" ","");
                 passWord = mEditTextPassword.getText().toString();
-                //Log.d("phoneNumber",phoneNumber);
-                //Log.d("passWord",passWord);
-
                 login();
             }
         });
@@ -217,12 +191,11 @@ public class MainLoginActivity extends AppCompatActivity {
             }
         });
 
-        //退出程序
+        //退出登录界面
         mImageBtn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(MainLoginActivity.this,MainLoginActivity.class);
+                Intent intent = new Intent(MainLoginActivity.this,MainActivity.class);
                 intent.putExtra(MainLoginActivity.TAG_EXIT, true);
                 startActivity(intent);
             }
@@ -230,8 +203,34 @@ public class MainLoginActivity extends AppCompatActivity {
 
     }
 
+    //初始化
+    private void init(){
+        requestCenter = new RequestCenter(this);
+        mEditTextPhoneNumber = (EditText)findViewById(R.id.et_PhoneNumber);
+        mEditTextPassword = (EditText)findViewById(R.id.et_PassWord);
+        mButtonLog = (Button)findViewById(R.id.bt_log);
+        mImageBtn = (ImageButton)findViewById(R.id.imageButton);
+        mImageBtn2 = (ImageButton)findViewById(R.id.imageView4);
+        mTvReg = (TextView)findViewById(R.id.textView11);
+        mTvLog = (TextView)findViewById(R.id.textView7);
+        mTvForget = (TextView)findViewById(R.id.textView5);
 
+        //设置输入框的提示字符hint
+        // 新建一个可以添加属性的文本对象
+        SpannableString ss = new SpannableString("请输入手机号");
+        SpannableString ss2 = new SpannableString("请输入密码");
+        // 新建一个属性对象,设置文字的大小
+        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(20,true);
+        AbsoluteSizeSpan ass2 = new AbsoluteSizeSpan(20,true);
+        // 附加属性到文本
+        ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss2.setSpan(ass2, 0, ss2.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        // 设置hint
+        mEditTextPhoneNumber.setHint(new SpannedString(ss)); // 一定要进行转换,否则属性会消失
+        mEditTextPassword.setHint(new SpannableString(ss2));
+    }
 
+    //账号或者密码错误弹窗
     private void SomeWrongDialog(){
         myDialog2=new MyDialog2(MainLoginActivity.this,R.style.MyDialog);
         //myDialog.setTitle("警告！");
@@ -246,6 +245,7 @@ public class MainLoginActivity extends AppCompatActivity {
         myDialog2.show();
     }
 
+    //密码错误达5次 找回密码弹窗
     private void FindPassWordDialog(){
         myDialog=new MyDialog(MainLoginActivity.this,R.style.MyDialog);
         //myDialog.setTitle("警告！");
@@ -270,7 +270,6 @@ public class MainLoginActivity extends AppCompatActivity {
         myDialog.show();
     }
 
-
     //退出程序
     @Override
     protected void onNewIntent(Intent intent) {
@@ -283,8 +282,7 @@ public class MainLoginActivity extends AppCompatActivity {
         }
     }
 
-
-    //登录login
+    //登录
     private void login(){
         JSONObject param_log = new JSONObject();
         try {

@@ -24,6 +24,7 @@ import comdemo.example.dell.homepagedemo.beans.ResponseMessage;
 import comdemo.example.dell.homepagedemo.R;
 import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
 import comdemo.example.dell.homepagedemo.request.RequestCenter;
+import comdemo.example.dell.homepagedemo.ui.dialog.MyDialog2;
 import okhttp3.Response;
 
 public class MessageVerification extends AppCompatActivity implements TextWatcher {
@@ -45,31 +46,16 @@ public class MessageVerification extends AppCompatActivity implements TextWatche
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message_verification);
-        requestCenter = new RequestCenter(this);
-        editText1 = (EditText)findViewById(R.id.editText6);
-        editText2 = (EditText)findViewById(R.id.editText7);
-        editText3 = (EditText)findViewById(R.id.editText8);
-        editText4 = (EditText)findViewById(R.id.editText9);
-        mTvPhone = (TextView)findViewById(R.id.textView3);
-        mTv4 =(TextView)findViewById(R.id.textView4);
-        mImageBtn = (ImageButton)findViewById(R.id.imageButton2);
-        //设置60s倒计时
-        time = new TimeCount(60000, 1000);
-        Intent intent = getIntent();//声明一个对象，并获得跳转过来的Intent对象
-        phoneNumber = intent.getStringExtra("phone");//从intent对象中获得数据
-        //type = intent.getStringExtra("type");
-        s = intent.getStringExtra("verifyCode");
-        mTvPhone.setText(phoneNumber);
-        editText1.addTextChangedListener(this);
-        editText2.addTextChangedListener(this);
-        editText3.addTextChangedListener(this);
-        editText4.addTextChangedListener(this);
+        //初始化
+        init();
+        //退出界面
         mImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+        //重新发送
         mTv4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,23 +107,28 @@ public class MessageVerification extends AppCompatActivity implements TextWatche
         }
     }
 
-
-
-    private void SomeWrongDialog(){
-        myDialog2=new MyDialog2(MessageVerification.this,R.style.MyDialog);
-        //myDialog.setTitle("警告！");
-        myDialog2.setMessage("验证码错误，请重新输入");
-        myDialog2.setYesOnclickListener("确定", new MyDialog2.onYesOnclickListener() {
-            @Override
-            public void onYesOnclick() {
-                myDialog2.dismiss();
-            }
-        });
-
-        myDialog2.show();
+    //初始化
+    private void init(){
+        requestCenter = new RequestCenter(this);
+        editText1 = (EditText)findViewById(R.id.editText6);
+        editText2 = (EditText)findViewById(R.id.editText7);
+        editText3 = (EditText)findViewById(R.id.editText8);
+        editText4 = (EditText)findViewById(R.id.editText9);
+        mTvPhone = (TextView)findViewById(R.id.textView3);
+        mTv4 =(TextView)findViewById(R.id.textView4);
+        mImageBtn = (ImageButton)findViewById(R.id.imageButton2);
+        //设置60s倒计时
+        time = new TimeCount(60000, 1000);
+        Intent intent = getIntent();//声明一个对象，并获得跳转过来的Intent对象
+        phoneNumber = intent.getStringExtra("phone");//从intent对象中获得数据
+        //type = intent.getStringExtra("type");
+        s = intent.getStringExtra("verifyCode");
+        mTvPhone.setText(phoneNumber);
+        editText1.addTextChangedListener(this);
+        editText2.addTextChangedListener(this);
+        editText3.addTextChangedListener(this);
+        editText4.addTextChangedListener(this);
     }
-
-
     //设置60s倒计时
     class TimeCount extends CountDownTimer {
 
@@ -162,8 +153,6 @@ public class MessageVerification extends AppCompatActivity implements TextWatche
 
         }
     }
-
-
     //根据电话发送短信验证码
     private void getRegisterVerifyCodeByPhone(){
         JSONObject param_getRegister = new JSONObject();
@@ -187,7 +176,6 @@ public class MessageVerification extends AppCompatActivity implements TextWatche
             }
         });
     }
-
     //验证短信验证码是正确
     private  void checkRegisterVerifyCodeByPhone(String e){
         JSONObject param_checkByphone = new JSONObject();

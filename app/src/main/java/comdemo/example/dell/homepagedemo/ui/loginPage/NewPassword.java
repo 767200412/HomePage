@@ -15,6 +15,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 
 import comdemo.example.dell.homepagedemo.R;
+import comdemo.example.dell.homepagedemo.ui.dialog.MyDialog2;
+import comdemo.example.dell.homepagedemo.utils.SomeMonitorEditText;
 
 public class NewPassword extends AppCompatActivity {
     private Button mButtonLog;
@@ -26,32 +28,8 @@ public class NewPassword extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_password);
-
-        mEditTextPassword = (EditText)findViewById(R.id.et_PassWord);
-        mEditTextPassword2 = (EditText)findViewById(R.id.et_PassWord2);
-        mButtonLog = (Button)findViewById(R.id.bt_log);
-        mImageBtn = (ImageButton)findViewById(R.id.imageButton);
-        mImageBtn2 = (ImageButton)findViewById(R.id.imageButton_2);
-        mImageBtn3 = (ImageButton)findViewById(R.id.imageButton2);
-
-        //限制按钮激活
-        new SomeMonitorEditText().SetMonitorEditText(mButtonLog, mEditTextPassword,mEditTextPassword2);
-
-
-        //
-        //设置输入框的提示字符hint
-        // 新建一个可以添加属性的文本对象
-        SpannableString ss = new SpannableString("请输入新密码，6位以上");
-        SpannableString ss2 = new SpannableString("请再次确认密码");
-        // 新建一个属性对象,设置文字的大小
-        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(20,true);
-        AbsoluteSizeSpan ass2 = new AbsoluteSizeSpan(20,true);
-        // 附加属性到文本
-        ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        ss2.setSpan(ass2, 0, ss2.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        // 设置hint
-        mEditTextPassword.setHint(new SpannedString(ss)); // 一定要进行转换,否则属性会消失
-        mEditTextPassword2.setHint(new SpannableString(ss2));
+        //初始化
+        init();
         //密码的显示/隐藏
         mImageBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -123,9 +101,35 @@ public class NewPassword extends AppCompatActivity {
         });
     }
 
+    //初始化
+    private  void init(){
+        mEditTextPassword = (EditText)findViewById(R.id.et_PassWord);
+        mEditTextPassword2 = (EditText)findViewById(R.id.et_PassWord2);
+        mButtonLog = (Button)findViewById(R.id.bt_log);
+        mImageBtn = (ImageButton)findViewById(R.id.imageButton);
+        mImageBtn2 = (ImageButton)findViewById(R.id.imageButton_2);
+        mImageBtn3 = (ImageButton)findViewById(R.id.imageButton2);
+        //限制按钮激活
+        new SomeMonitorEditText().SetMonitorEditText(mButtonLog, mEditTextPassword,mEditTextPassword2);
+
+        //设置输入框的提示字符hint
+        // 新建一个可以添加属性的文本对象
+        SpannableString ss = new SpannableString("请输入新密码，6位以上");
+        SpannableString ss2 = new SpannableString("请再次确认密码");
+        // 新建一个属性对象,设置文字的大小
+        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(20,true);
+        AbsoluteSizeSpan ass2 = new AbsoluteSizeSpan(20,true);
+        // 附加属性到文本
+        ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        ss2.setSpan(ass2, 0, ss2.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        // 设置hint
+        mEditTextPassword.setHint(new SpannedString(ss)); // 一定要进行转换,否则属性会消失
+        mEditTextPassword2.setHint(new SpannableString(ss2));
+    }
+
+    //错误弹窗
     private void wrong(String message,String button){
         myDialog2=new MyDialog2(NewPassword.this,R.style.MyDialog);
-        //myDialog.setTitle("警告！");
         myDialog2.setMessage(message);
         myDialog2.setYesOnclickListener(button, new MyDialog2.onYesOnclickListener() {
             @Override

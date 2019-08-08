@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import comdemo.example.dell.homepagedemo.R;
+import comdemo.example.dell.homepagedemo.utils.SomeMonitorEditText;
 
 public class FindPassword extends AppCompatActivity {
 

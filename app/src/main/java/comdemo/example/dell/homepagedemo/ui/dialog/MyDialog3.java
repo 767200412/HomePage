@@ -1,4 +1,4 @@
-package comdemo.example.dell.homepagedemo.ui.loginPage;
+package comdemo.example.dell.homepagedemo.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;

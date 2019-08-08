@@ -62,30 +62,30 @@ public class HomeFragment extends Fragment {
     public final int DATA_GAT_SUCCESSS = 1;
 
     private View view,view2;//定义view用来设置fragment的layout
-    private Button btn_log;
-    private ConstraintLayout cs;
-    private Banner banner;
-    private MarqueeView marqueeView;
-    private HorizontalScrollView hs;
-    private LinearLayout ls;
-    private TextView tv;
-    private ImageView imageView;
+    private Button btn_log;//立即登录按钮
+    private ConstraintLayout constraintLayout;//未登录显示的浮层
+    private Banner banner;//广告图片显示
+    private MarqueeView marqueeView;//文字广告图片显示
+    private HorizontalScrollView hs;//推荐品牌滚动
+    private LinearLayout linearLayout;//推荐品牌滚动
+    private TextView tv_name;//品牌的名字
+    private ImageView imageView;//品牌的图标
     private SwipeRefreshLayout swipeRefreshLayout;
     private android.support.design.widget.TabLayout mytab;
     private android.support.v7.widget.RecyclerView mRecyclerView;
     private List<String> mEntityList;//公司列表
-    private RequestCenter requestCenter ;
-    private Topdata topdata;
-    private Data data;
-    private comdemo.example.dell.homepagedemo.beans.Banner banner2;
-    private List<Header> headers;
-    private Indextop indextop;
-    private List<Items> items,items2,items3;
-    private List<Items> items4 = new ArrayList<>();
-    private Platformarticleselected platformarticleselected;
-    private Menuitems menuitems;
-    private Polymericcompanies polymericcompanies;
-    private Pageinfo pageinfo;
+    private RequestCenter requestCenter ;//网络请求中心
+    private Topdata topdata;//响应实体类
+    private Data data;//响应实体类
+    private comdemo.example.dell.homepagedemo.beans.Banner banner2;//响应实体类
+    private List<Header> headers;//响应实体类
+    private Indextop indextop;//响应实体类
+    private List<Items> items,items2,items3;//响应实体类
+    private List<Items> items4 = new ArrayList<>();//响应实体类
+    private Platformarticleselected platformarticleselected;//响应实体类
+    private Menuitems menuitems;//响应实体类
+    private Polymericcompanies polymericcompanies;//响应实体类
+    private Pageinfo pageinfo;//响应实体类
     private CategoryIdsByOr categoryIdsByOr;//用于标签分类的标识
     private String categoryIdsByOrNumber;
     private RecycleviewAdapter adapter;    // 设置adapter
@@ -95,7 +95,7 @@ public class HomeFragment extends Fragment {
     private int take = 10; //一次加载的数据量
     private List images = new ArrayList();//横向滚动广告数据集
     private List<String> messages = new ArrayList<>();//垂直滚动 跑马灯数据集
-    private SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;//保存数据
     private SharedPreferences.Editor editor;
     private String id;
 
@@ -197,7 +197,7 @@ public class HomeFragment extends Fragment {
     //初始化
     private void init(){
         hs = (HorizontalScrollView)view.findViewById(R.id.hs);
-        ls = (LinearLayout)view.findViewById(R.id.liner);
+        linearLayout = (LinearLayout)view.findViewById(R.id.liner);
         banner = (Banner)view.findViewById(R.id.tv_ad);
         marqueeView = (MarqueeView)view.findViewById(R.id.tv_bottomNews);
         requestCenter = new RequestCenter(getContext());
@@ -205,18 +205,18 @@ public class HomeFragment extends Fragment {
         mytab = (android.support.design.widget.TabLayout) view.findViewById(R.id.roll_tab);
         mRecyclerView = view.findViewById(R.id.review);
         btn_log = (Button)view.findViewById(R.id.log);
-        cs = (ConstraintLayout)view.findViewById(R.id.cs_bottom);
+        constraintLayout = (ConstraintLayout)view.findViewById(R.id.cs_bottom);
     }
 
     //判断是否登录 决定下方浮层的显、隐
     private void isLog(){
         id = sharedPreferences.getString("id","NULL");
         if(id.equals("NULL")){
-            cs.setVisibility(View.VISIBLE);
+            constraintLayout.setVisibility(View.VISIBLE);
             Log.d("未登录","");
         }
         else {
-            cs.setVisibility(View.GONE);
+            constraintLayout.setVisibility(View.GONE);
             Log.d("登录","");
         }
     }
@@ -282,13 +282,13 @@ public class HomeFragment extends Fragment {
     public void setHorizontalScrollView(){
         for(Items item:items2) {
             view2 = LayoutInflater.from(getActivity()).inflate(R.layout.top_item, null);
-            tv = (TextView) view2.findViewById(R.id.top_name);
+            tv_name = (TextView) view2.findViewById(R.id.top_name);
             imageView = (ImageView)view2.findViewById(R.id.top_image);
-            tv.setText(item.getTitle());
+            tv_name.setText(item.getTitle());
             Glide.with(getContext())
                     .load(item.getCover2())
                     .into(imageView);
-            ls.addView(view2);
+            linearLayout.addView(view2);
 
         }
     }

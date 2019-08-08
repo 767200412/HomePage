@@ -1,4 +1,4 @@
-package comdemo.example.dell.homepagedemo.ui.loginPage;
+package comdemo.example.dell.homepagedemo.utils;
 
 import android.text.Editable;
 import android.text.TextWatcher;
