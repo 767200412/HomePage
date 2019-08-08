@@ -25,6 +25,7 @@ android {
             res.srcDirs=
                     [
                             'src/main/res/layout/HomePage',
+                            'src/main/res/layout/Login',
                             'src/main/res'
                     ]
         }

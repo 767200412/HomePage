@@ -1,14 +1,20 @@
 package comdemo.example.dell.homepagedemo.Ui.MainPage;
 
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,6 +45,7 @@ import comdemo.example.dell.homepagedemo.Beans.Platformarticleselected;
 import comdemo.example.dell.homepagedemo.Beans.Polymericcompanies;
 import comdemo.example.dell.homepagedemo.Beans.Topdata;
 import comdemo.example.dell.homepagedemo.R;
+import comdemo.example.dell.homepagedemo.Ui.LoginPage.MainLoginActivity;
 import comdemo.example.dell.homepagedemo.Utils.GlideImageLoader;
 import comdemo.example.dell.homepagedemo.adapter.RecycleviewAdapter;
 import comdemo.example.dell.homepagedemo.listener.EndlessRecyclerOnScrollListener;
@@ -55,6 +62,8 @@ public class HomeFragment extends Fragment {
     public final int DATA_GAT_SUCCESSS = 1;
 
     private View view,view2;//定义view用来设置fragment的layout
+    private Button btn_log;
+    private ConstraintLayout cs;
     private Banner banner;
     private MarqueeView marqueeView;
     private HorizontalScrollView hs;
@@ -95,6 +104,19 @@ public class HomeFragment extends Fragment {
     private List images = new ArrayList();//横向滚动广告数据集
     private List<String> messages = new ArrayList<>();//垂直滚动 跑马灯数据集
 
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        //步骤1：创建一个SharedPreferences对象
+        sharedPreferences = getActivity().getSharedPreferences("LoginData",Context.MODE_PRIVATE);
+        //步骤2： 实例化SharedPreferences.Editor对象
+         editor = sharedPreferences.edit();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -107,7 +129,18 @@ public class HomeFragment extends Fragment {
         swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.n_scroll_view);
         mytab = (android.support.design.widget.TabLayout) view.findViewById(R.id.roll_tab);
         mRecyclerView = view.findViewById(R.id.review);
+        btn_log = (Button)view.findViewById(R.id.log);
+        cs = (ConstraintLayout)view.findViewById(R.id.cs_bottom);
 
+        String id = sharedPreferences.getString("id","NULL");
+        if(id.equals("NULL")){
+                 cs.setVisibility(View.VISIBLE);
+                 Log.d("未登录","");
+        }
+        else {
+            cs.setVisibility(View.GONE);
+            Log.d("登录","");
+        }
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -127,6 +160,16 @@ public class HomeFragment extends Fragment {
         mRecyclerView.setLayoutManager(manager);
         initCompany();
 
+
+
+
+        btn_log.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),MainLoginActivity.class);
+                startActivity(intent);
+            }
+        });
 
         mytab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -234,7 +277,7 @@ public class HomeFragment extends Fragment {
     //设置水平滚动 推荐品牌
     public void setHorizontalScrollView(){
         for(Items item:items2) {
-            view2 = LayoutInflater.from(getContext()).inflate(R.layout.top_item, null);
+            view2 = LayoutInflater.from(getActivity()).inflate(R.layout.top_item, null);
             tv = (TextView) view2.findViewById(R.id.top_name);
             imageView = (ImageView)view2.findViewById(R.id.top_image);
             tv.setText(item.getTitle());
