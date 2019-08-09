@@ -10,8 +10,8 @@ import java.util.concurrent.TimeUnit;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
 
-import comdemo.example.dell.homepagedemo.Log.JsonUtil;
-import comdemo.example.dell.homepagedemo.Log.LogUtil;
+import comdemo.example.dell.homepagedemo.log.JsonUtil;
+import comdemo.example.dell.homepagedemo.log.LogUtil;
 import comdemo.example.dell.homepagedemo.cookie.CookieJarImpl;
 import comdemo.example.dell.homepagedemo.cookie.PersistentCookieStore;
 import comdemo.example.dell.homepagedemo.okhttp.https.HttpsUtils;

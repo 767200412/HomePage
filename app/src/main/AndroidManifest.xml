@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.mainPage.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +20,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.loginPage.MainLoginActivity" />
+        <activity android:name=".ui.loginPage.Register" />
+        <activity android:name=".ui.loginPage.MessageVerification" />
+        <activity android:name=".ui.loginPage.Password" />
+        <activity android:name=".ui.loginPage.ReallyName" />
+        <activity android:name=".ui.loginPage.VerificationLog" />
+        <activity android:name=".ui.loginPage.FindPassword" />
+        <activity android:name=".ui.loginPage.NewPassword" />
+        <activity android:name=".ui.loginPage.ForgetVeriyActivity" />
+        <activity android:name=".ui.loginPage.LoginVerifyActivity"/>
     </application>
 
 </manifest>

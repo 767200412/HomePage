@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="false" android:drawable="@mipmap/ic_little_eye_black_hide" />
+    <item android:state_focused="true" android:drawable="@mipmap/ic_little_eye_black_hide" />
+    <item android:state_pressed="true" android:drawable="@mipmap/ic_little_eye_black_show" />
+</selector>

@@ -13,8 +13,21 @@ public class HttpConstant {
     public static String getData = "http://apidev-gateway.fccn.cc/gqlgateway/graphql";
 
     public static String HasAccountByPhoneNumber = URL + "Account/HasAccountByPhoneNumber";
+    //注册
     public static String VerifyCodeImRanNO = URL + "VerifyCode/ImgRanNO/GetRegisterVerifyCodeByPhone";
     public static String VerifyCodeCheck = URL + "VerifyCode/Check/GetRegisterVerifyCodeByPhone/";
     public static String GetRegisterVerifyCodeByPhone = URL + "Account/GetRegisterVerifyCodeByPhone";
     public static String CheckRegisterVerifyCodeByPhone = URL + "Account/CheckRegisterVerifyCodeByPhone";
+    //短信验证码登录
+    public static String LoginVerifyCodeImRanNO = URL + "VerifyCode/ImgRanNO/GetLoginVerifyCode";
+    public static String LoginVerifyCodeCheck = URL + "VerifyCode/Check/GetLoginVerifyCode/";
+    public static String GetLoginVerifyCode = URL + "Account/GetLoginVerifyCode";
+    public static String CheckLoginVerifyCodeByPhone = URL + "Account/CheckLoginVerifyCodeByPhone";
+    public static String LoginBySms = URL +"Account/LoginBySms";
+    //忘记密码 重置密码
+    public static String GetResetPasswordVerifyCodeByPhone = URL + "VerifyCode/ImgRanNO/GetResetPasswordVerifyCodeByPhone";
+    public static String CheckResetPasswordVerifyCodeByPhone = URL + "VerifyCode/Check/GetResetPasswordVerifyCodeByPhone/";
+    public static String SendResetPasswordVerifyCodeByPhone = URL + "Account/GetResetPasswordVerifyCodeByPhone";
+    public static String CheckSendResetPasswordVerifyCodeByPhone =URL + "Account/CheckResetPasswordVerifyCodeByPhone";
+    public static String ResetPassword = URL + "Account/ResetPassword";
 }
