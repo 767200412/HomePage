@@ -277,7 +277,7 @@ public class MainLoginActivity extends AppCompatActivity {
         if (intent != null) {
             boolean isExit = intent.getBooleanExtra(TAG_EXIT, false);
             if (isExit) {
-                this.finish();
+                Intent intent_main = new Intent(MainLoginActivity.this,MainActivity.class);
             }
         }
     }

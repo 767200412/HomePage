@@ -24,13 +24,14 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import comdemo.example.dell.homepagedemo.beans.ResponseMessage;
 import comdemo.example.dell.homepagedemo.R;
+import comdemo.example.dell.homepagedemo.beans.ResponseMessage;
 import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
 import comdemo.example.dell.homepagedemo.request.RequestCenter;
 import comdemo.example.dell.homepagedemo.ui.dialog.MyDialog;
 import comdemo.example.dell.homepagedemo.ui.dialog.MyDialog2;
 import comdemo.example.dell.homepagedemo.ui.dialog.MyDialog3;
+import comdemo.example.dell.homepagedemo.ui.mainPage.MainActivity;
 import comdemo.example.dell.homepagedemo.utils.SomeMonitorEditText;
 import okhttp3.Response;
 
@@ -69,7 +70,7 @@ public class Register extends AppCompatActivity {
             }
         });
 
-
+        //下一步按钮
         mBtnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,7 +116,7 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(Register.this,MainLoginActivity.class);
+                Intent intent = new Intent(Register.this,MainActivity.class);
                 intent.putExtra(MainLoginActivity.TAG_EXIT, true);
                 startActivity(intent);
             }

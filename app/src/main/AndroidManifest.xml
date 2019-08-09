@@ -28,7 +28,8 @@
         <activity android:name=".ui.loginPage.VerificationLog" />
         <activity android:name=".ui.loginPage.FindPassword" />
         <activity android:name=".ui.loginPage.NewPassword" />
-        <activity android:name=".ui.loginPage.ForgetVeriyActivity"></activity>
+        <activity android:name=".ui.loginPage.ForgetVeriyActivity" />
+        <activity android:name=".ui.loginPage.LoginVerifyActivity"/>
     </application>
 
 </manifest>

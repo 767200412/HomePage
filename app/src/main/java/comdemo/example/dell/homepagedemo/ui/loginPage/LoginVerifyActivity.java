@@ -1,6 +1,8 @@
 package comdemo.example.dell.homepagedemo.ui.loginPage;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -27,28 +29,32 @@ import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
 import comdemo.example.dell.homepagedemo.request.RequestCenter;
 import comdemo.example.dell.homepagedemo.ui.dialog.MyDialog2;
 import comdemo.example.dell.homepagedemo.ui.dialog.MyDialog3;
+import comdemo.example.dell.homepagedemo.ui.mainPage.MainActivity;
 import okhttp3.Response;
 
-public class MessageVerification extends AppCompatActivity implements TextWatcher {
+public class LoginVerifyActivity extends AppCompatActivity implements TextWatcher {
 
-    private EditText editText1,editText2,editText3,editText4;
+    private EditText editText1,editText2,editText3,editText4,editText5,editText6;
     private TextView mTvPhone,mTv4;
     private MyDialog2 myDialog2;
     private MyDialog3 myDialog3;
     private ImageButton mImageBtn;
     private TimeCount time;
     private String phoneNumber;//用户手机号
-    private String s;//图形验证码
+    private String veriCode;//图形验证码
     private String edit;//短信验证码
     private Bitmap bitmap;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     private RequestCenter requestCenter ;
     private Gson gson = new Gson();
     private ResponseMessage responseMessage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_message_verification);
+        setContentView(R.layout.activity_login_verify);
         //初始化
         init();
         //退出界面
@@ -62,14 +68,11 @@ public class MessageVerification extends AppCompatActivity implements TextWatche
         mTv4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //图形验证码
                 getVeriCode();
                 time.start();
             }
         });
     }
-
-
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -100,16 +103,27 @@ public class MessageVerification extends AppCompatActivity implements TextWatche
                 editText3.clearFocus();
                 editText4.requestFocus();
             }
-            else
+            else if(editText4.isFocused())
             {
                 editText4.clearFocus();
+                editText5.requestFocus();
+            }
+            else if(editText5.isFocused())
+            {
+                editText5.clearFocus();
+                editText6.requestFocus();
+            }
+            else
+            {
+                editText6.clearFocus();
                 //验证，跳转到下一个页面设置密码
-                edit = editText1.getText().toString() + editText2.getText().toString()+editText3.getText().toString()+editText4.getText().toString();
-                checkRegisterVerifyCodeByPhone(edit);
+                edit = editText1.getText().toString() + editText2.getText().toString()+editText3.getText().toString()+editText4.getText().toString()+editText5.getText().toString()+editText6.getText().toString();
+                CheckLoginVerifyCodeByPhone(edit);
 
             }
         }
     }
+
 
     //初始化
     private void init(){
@@ -118,6 +132,8 @@ public class MessageVerification extends AppCompatActivity implements TextWatche
         editText2 = (EditText)findViewById(R.id.editText7);
         editText3 = (EditText)findViewById(R.id.editText8);
         editText4 = (EditText)findViewById(R.id.editText9);
+        editText5 = (EditText)findViewById(R.id.editText10);
+        editText6 = (EditText)findViewById(R.id.editText11);
         mTvPhone = (TextView)findViewById(R.id.textView3);
         mTv4 =(TextView)findViewById(R.id.textView4);
         mImageBtn = (ImageButton)findViewById(R.id.imageButton2);
@@ -127,13 +143,16 @@ public class MessageVerification extends AppCompatActivity implements TextWatche
         Intent intent = getIntent();//声明一个对象，并获得跳转过来的Intent对象
         phoneNumber = intent.getStringExtra("phone");//从intent对象中获得数据
         //type = intent.getStringExtra("type");
-        s = intent.getStringExtra("verifyCode");
+        veriCode = intent.getStringExtra("verifyCode");
         mTvPhone.setText(phoneNumber);
         editText1.addTextChangedListener(this);
         editText2.addTextChangedListener(this);
         editText3.addTextChangedListener(this);
         editText4.addTextChangedListener(this);
+        editText5.addTextChangedListener(this);
+        editText6.addTextChangedListener(this);
     }
+
     //设置60s倒计时
     class TimeCount extends CountDownTimer {
 
@@ -158,74 +177,11 @@ public class MessageVerification extends AppCompatActivity implements TextWatche
 
         }
     }
-    //根据电话发送短信验证码
-    private void getRegisterVerifyCodeByPhone(){
-        JSONObject param_getRegister = new JSONObject();
-        try {
-            param_getRegister.put("VerifyCode",s);
-            param_getRegister.put("PhoneRegionCode","+86");
-            param_getRegister.put("PhoneNumber",phoneNumber);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        requestCenter.GetRegisterVerifyCodeByPhone(param_getRegister, new DisposeDataListener() {
-            @Override
-            public void onSuccess(Response responseObj) {
-                //成功 没有返回
 
-            }
-
-            @Override
-            public void onFailure(Object responseObj) {
-
-            }
-        });
-    }
-    //验证短信验证码是正确
-    private  void checkRegisterVerifyCodeByPhone(String e){
-        JSONObject param_checkByphone = new JSONObject();
-        try {
-            param_checkByphone.put("PhoneRegionCode","+86");
-            param_checkByphone.put("PhoneNumber",phoneNumber);
-            param_checkByphone.put("VerifyCode",e);
-        } catch (JSONException e1) {
-            e1.printStackTrace();
-        }
-
-        requestCenter.CheckRegisterVerifyCodeByPhone(param_checkByphone, new DisposeDataListener() {
-            @Override
-            public void onSuccess(Response responseObj) {
-                String re = null;
-                try {
-                     re = responseObj.body().string();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-
-                if(re.equals("true")){
-                    //跳转到设置密码
-                    Intent intent = new Intent(MessageVerification.this,Password.class);
-                    intent.putExtra("phone",phoneNumber);
-                    intent.putExtra("verifyCode",edit);
-                    time.cancel();
-                    startActivity(intent);
-
-                }
-                else if (re.equals("false")){
-                    Toast.makeText(MessageVerification.this,"验证码错误",Toast.LENGTH_LONG).show();
-                    editText4.requestFocus();
-                }
-            }
-
-            @Override
-            public void onFailure(Object responseObj) {
-            }
-        });
-    }
 
     //获取图形验证码
     private void getVeriCode(){
-        requestCenter.getVerify(new DisposeDataListener() {
+        requestCenter.getLoginVerify(new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 byte[] b = new byte[0];
@@ -244,17 +200,16 @@ public class MessageVerification extends AppCompatActivity implements TextWatche
             }
         });
     }
-
     //图形验证码弹窗
     private void veriCodeDialog(Bitmap bitmap){
-        myDialog3 = new MyDialog3(MessageVerification.this,R.style.MyDialog);
+        myDialog3 = new MyDialog3(LoginVerifyActivity.this,R.style.MyDialog);
         myDialog3.setBitmap(bitmap);
         myDialog3.setImageOnclickListener(new MyDialog3.onImageOnclickListener(){
 
             @Override
             public void onImageOnclick() {
                 myDialog3.dismiss();
-                requestCenter.getVerify(new DisposeDataListener() {
+                requestCenter.getResetVerify(new DisposeDataListener() {
                     @Override
                     public void onSuccess(Response responseObj) {
                         byte[] b = new byte[0];
@@ -277,7 +232,7 @@ public class MessageVerification extends AppCompatActivity implements TextWatche
         myDialog3.setYesOnclickListener("确定", new MyDialog3.onYesOnclickListener() {
             @Override
             public void onYesOnclick() {
-                s = myDialog3.getEditNumber().replaceAll(" ","");
+                veriCode = myDialog3.getEditNumber().replaceAll(" ","");
                 //验证是否真确
                 veriCodeCheck();
 
@@ -295,7 +250,7 @@ public class MessageVerification extends AppCompatActivity implements TextWatche
 
     //验证码是否正确
     private void veriCodeCheck(){
-        requestCenter.Verify(s, new DisposeDataListener() {
+        requestCenter.LoginVerify(veriCode, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 String check = null;
@@ -307,12 +262,12 @@ public class MessageVerification extends AppCompatActivity implements TextWatche
 
                 if(check.equals("true")){
                     //图形验证码输入正确 发送短信验证码
-                    getRegisterVerifyCodeByPhone();
+                    GetLoginVerifyCode();
 
                 }
                 else if(check.equals("false")){
                     //验证码输入错误
-                    Toast.makeText(MessageVerification.this,"验证码错误，请重新输入",Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginVerifyActivity.this,"验证码错误，请重新输入",Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -321,5 +276,112 @@ public class MessageVerification extends AppCompatActivity implements TextWatche
 
             }
         });
+    }
+
+    //获取6位手机短信验证码
+    private void GetLoginVerifyCode(){
+        JSONObject param_getRegister = new JSONObject();
+        try {
+            param_getRegister.put("VerifyCode",veriCode);
+            param_getRegister.put("PhoneRegionCode","+86");
+            param_getRegister.put("PhoneNumber",phoneNumber);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        requestCenter.GetLoginVerifyCode(param_getRegister, new DisposeDataListener() {
+            @Override
+            public void onSuccess(Response responseObj) {
+                //成功 没有返回
+            }
+
+            @Override
+            public void onFailure(Object responseObj) {
+
+            }
+        });
+    }
+
+    //验证短信验证码是正确
+    private  void CheckLoginVerifyCodeByPhone(String e){
+        JSONObject param_checkByphone = new JSONObject();
+        try {
+            param_checkByphone.put("PhoneRegionCode","+86");
+            param_checkByphone.put("PhoneNumber",phoneNumber);
+            param_checkByphone.put("VerifyCode",e);
+        } catch (JSONException e1) {
+            e1.printStackTrace();
+        }
+
+        requestCenter.CheckLoginVerifyCodeByPhone(param_checkByphone, new DisposeDataListener() {
+            @Override
+            public void onSuccess(Response responseObj) {
+                String re = null;
+                try {
+                    re = responseObj.body().string();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+
+                if(re.equals("true")) {
+                    LoginBysms();
+                }
+                else if (re.equals("false")){
+                    Toast.makeText(LoginVerifyActivity.this,"验证码错误",Toast.LENGTH_LONG).show();
+                    editText6.requestFocus();
+                }
+            }
+
+            @Override
+            public void onFailure(Object responseObj) {
+            }
+        });
+    }
+
+    private void LoginBysms(){
+        JSONObject parms = new JSONObject();
+        try {
+            parms.put("PhoneRegionCode","+86");
+            parms.put("LoginMethod","P:Android,B:xiaomi,BC:redmi 3s,OS:xiaomi,OSV:22,APPV:6.0.5");
+            parms.put("PhoneNumber",phoneNumber);
+            parms.put("VerifyCode",edit);
+            parms.put("RememberMe",true);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        requestCenter.LoginBySms(parms, new DisposeDataListener() {
+            @Override
+            public void onSuccess(Response responseObj) {
+                String re = null;
+                try {
+                    re = responseObj.body().string();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                //步骤1：创建一个SharedPreferences对象
+                sharedPreferences = getSharedPreferences("LoginData", Context.MODE_PRIVATE);
+                //步骤2： 实例化SharedPreferences.Editor对象
+                editor = sharedPreferences.edit();
+                if (re != null) {
+                    responseMessage = gson.fromJson(re, ResponseMessage.class);
+                }
+                //步骤3：将获取过来的值放入文件
+                editor.putString("id", responseMessage.getId());
+                //步骤4：提交
+                editor.commit();
+                time.cancel();
+                //跳转的主页面
+                Intent intent = new Intent(LoginVerifyActivity.this, MainActivity.class);
+                startActivity(intent);
+
+            }
+
+            @Override
+            public void onFailure(Object responseObj) {
+
+            }
+        });
+
     }
 }

@@ -1,5 +1,6 @@
 package comdemo.example.dell.homepagedemo.ui.loginPage;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
@@ -14,15 +15,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import comdemo.example.dell.homepagedemo.R;
+import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
+import comdemo.example.dell.homepagedemo.request.RequestCenter;
 import comdemo.example.dell.homepagedemo.ui.dialog.MyDialog2;
 import comdemo.example.dell.homepagedemo.utils.SomeMonitorEditText;
+import okhttp3.Response;
 
 public class NewPassword extends AppCompatActivity {
     private Button mButtonLog;
     private ImageButton mImageBtn,mImageBtn2, mImageBtn3;
     private EditText mEditTextPassword,mEditTextPassword2;
     private MyDialog2 myDialog2;
+    private String phoneVeriyCode;//手机验证码
+    private String phoneNumber;//手机密码
+    private String p1,p2;//输入的新密码
+    private RequestCenter requestCenter ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +75,7 @@ public class NewPassword extends AppCompatActivity {
             }
         });
 
-
+        //退出界面
         mImageBtn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,8 +85,8 @@ public class NewPassword extends AppCompatActivity {
         mButtonLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                  String p1 = mEditTextPassword.getText().toString();
-                  String p2 = mEditTextPassword2.getText().toString();
+                   p1 = mEditTextPassword.getText().toString();
+                   p2 = mEditTextPassword2.getText().toString();
 
                   if(!p1.equals(p2))
                   {
@@ -88,14 +99,34 @@ public class NewPassword extends AppCompatActivity {
                       //密码少于6位
                      wrong("密码少于6位","确定");
                  }
-                 else if(!p1.equals("^(?![a-zA-z]+$)(?!\\d+$)(?![!@#$%^&*]+$)(?![a-zA-z\\d]+$)(?![a-zA-z!@#$%^&*]+$)(?![\\d!@#$%^&*]+$)[a-zA-Z\\d!@#$%^&*]+$"))
-                {
-                     //
-                    wrong("仅支持数字、字母或符号","确定");
-                }
                 else
                   {
-                      //跳转到首页
+                      //跳转到登录页面
+                      JSONObject params =new JSONObject();
+                      try {
+                          params.put("PhoneRegionCode", "+86");
+                          params.put("Account", phoneNumber);
+                          params.put("VerifyCode",phoneVeriyCode);
+                          params.put("NewPassword",p1);
+                          params.put("ConfirmPassword",p2);
+                      } catch (JSONException e) {
+                          e.printStackTrace();
+                      }
+
+                      requestCenter.ResetPassword(params, new DisposeDataListener() {
+                          @Override
+                          public void onSuccess(Response responseObj) {
+                                  //跳转到登录界面
+                                  Intent intent = new Intent(NewPassword.this, MainLoginActivity.class);
+                                  startActivity(intent);
+                          }
+
+                          @Override
+                          public void onFailure(Object responseObj) {
+
+                          }
+                      });
+
                   }
             }
         });
@@ -109,6 +140,7 @@ public class NewPassword extends AppCompatActivity {
         mImageBtn = (ImageButton)findViewById(R.id.imageButton);
         mImageBtn2 = (ImageButton)findViewById(R.id.imageButton_2);
         mImageBtn3 = (ImageButton)findViewById(R.id.imageButton2);
+        requestCenter = new RequestCenter(this);
         //限制按钮激活
         new SomeMonitorEditText().SetMonitorEditText(mButtonLog, mEditTextPassword,mEditTextPassword2);
 
@@ -125,6 +157,9 @@ public class NewPassword extends AppCompatActivity {
         // 设置hint
         mEditTextPassword.setHint(new SpannedString(ss)); // 一定要进行转换,否则属性会消失
         mEditTextPassword2.setHint(new SpannableString(ss2));
+        Intent intent = getIntent();
+        phoneVeriyCode = intent.getStringExtra("phoneVeriyCode");
+        phoneNumber = intent.getStringExtra("phoneNumber");
     }
 
     //错误弹窗
