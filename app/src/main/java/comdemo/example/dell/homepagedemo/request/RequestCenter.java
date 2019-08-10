@@ -35,6 +35,8 @@ public class RequestCenter {
                 new DisposeDataHandle(listener,clazz));
     }
 
+
+
     //
     //根据参数发送所有的post请求
     private static void postRequest(String url, RequestParams params,
@@ -164,6 +166,15 @@ public class RequestCenter {
     //重置密码
     public static void ResetPassword(JSONObject params,DisposeDataListener listener){
         RequestCenter.postRequest(HttpConstant.ResetPassword,params,listener,null);
+    }
+
+    //获取新闻标签
+    public static void GetPlatformArticleCategory(RequestParams params,DisposeDataListener listener){
+        RequestCenter.getRequest(HttpConstant.GetPlatformArticleCategory,params,listener,null);
+    }
+
+    public static void GetPlatformArticles(RequestParams params,DisposeDataListener listener){
+        RequestCenter.getRequest(HttpConstant.GetPlatformArticles,params,listener,null);
     }
 
 

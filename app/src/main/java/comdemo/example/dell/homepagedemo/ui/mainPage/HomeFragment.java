@@ -69,6 +69,7 @@ public class HomeFragment extends Fragment {
     private HorizontalScrollView hs;//推荐品牌滚动
     private LinearLayout linearLayout;//推荐品牌滚动
     private TextView tv_name;//品牌的名字
+    private TextView tv_news;//新闻
     private ImageView imageView;//品牌的图标
     private SwipeRefreshLayout swipeRefreshLayout;
     private android.support.design.widget.TabLayout mytab;
@@ -139,6 +140,15 @@ public class HomeFragment extends Fragment {
         //加载公司数据
         initCompany();
 
+        //新闻
+        tv_news.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),NewsActivity.class);
+                startActivity(intent);
+            }
+        });
+
         //立即登录按钮监听
         btn_log.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,6 +216,7 @@ public class HomeFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.review);
         btn_log = (Button)view.findViewById(R.id.log);
         constraintLayout = (ConstraintLayout)view.findViewById(R.id.cs_bottom);
+        tv_news=(TextView)view.findViewById(R.id.tv_news);
     }
 
     //判断是否登录 决定下方浮层的显、隐
@@ -294,10 +305,10 @@ public class HomeFragment extends Fragment {
     }
     //显示 最上方 滚动图片广告
     public void showAd(){
-        //banner = (Banner)view.findViewById(R.id.tv_ad);
+        //设置图片集合
+        banner.setImages(images);
         //设置图片加载器
         banner.setImageLoader(new GlideImageLoader());
-        //banner.setBannerTitles(titles);
         //banner.setBannerStyle(BannerConfig.NUM_INDICATOR_TITLE);
         //设置图片集合
         banner.setImages(images);

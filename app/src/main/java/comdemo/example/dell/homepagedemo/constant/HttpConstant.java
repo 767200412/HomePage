@@ -30,4 +30,8 @@ public class HttpConstant {
     public static String SendResetPasswordVerifyCodeByPhone = URL + "Account/GetResetPasswordVerifyCodeByPhone";
     public static String CheckSendResetPasswordVerifyCodeByPhone =URL + "Account/CheckResetPasswordVerifyCodeByPhone";
     public static String ResetPassword = URL + "Account/ResetPassword";
+
+    //获取新闻文章
+    public static String GetPlatformArticleCategory = URL + "PlatformArticles/PlatformArticleCategory/List";
+    public static String GetPlatformArticles = URL + "PlatformArticles/PlatformArticle/List";
 }
