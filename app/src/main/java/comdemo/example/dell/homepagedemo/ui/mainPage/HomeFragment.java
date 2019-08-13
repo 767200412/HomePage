@@ -202,7 +202,7 @@ public class HomeFragment extends Fragment {
 
 
 
-        onHide();
+
         //公司列表下拉监听  分页加载
         mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
@@ -216,15 +216,18 @@ public class HomeFragment extends Fragment {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                //onHide();
                 if (distance > THRESHOLD && !visible) {
                     //显示动画
                     visible = true;
-                    onShow();
+                    fab.setVisibility(View.VISIBLE);
+                    //onShow();
                     distance = 0;
                 } else if (distance < -50 && visible) {
                     //隐藏动画
                     visible = false;
-                    onHide();
+                    fab.setVisibility(View.GONE);
+                   // onHide();
                     distance = 0;
                 }
 
@@ -233,6 +236,15 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+
+        //回到安顶部
+        fab_company.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRecyclerView.smoothScrollToPosition(0);
+            }
+        });
+
         return view;
     }
 
@@ -252,7 +264,7 @@ public class HomeFragment extends Fragment {
         fab_company = (TextView)view.findViewById(R.id.fab_company);
         fab_microshop = (TextView)view.findViewById(R.id.fab_microshop);
         fab = (ConstraintLayout)view.findViewById(R.id.constraintLayout_fab);
-
+        fab.setVisibility(View.GONE);
     }
 
     //判断是否登录 决定下方浮层的显、隐

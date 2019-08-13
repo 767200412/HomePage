@@ -87,6 +87,14 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             RecycleviewViewHolder recycleviewViewHolder = (RecycleviewViewHolder)holder;
             Product product = mItemList.get(position);
             Company company = product.getCompany();
+            RequestOptions requestOptions = new RequestOptions()
+                    .circleCrop()
+                    .error(recycleviewViewHolder.error);
+
+            Glide.with(mContext)
+                    .load(company.getLogoUrl())
+                    .apply(requestOptions)
+                    .into(recycleviewViewHolder.image_icon);
             ((RecycleviewViewHolder) holder).tv_name.setText(company.getName());
             ((RecycleviewViewHolder) holder).tv_time.setText(product.getCreatedTime().substring(0,9));
             String content =null;

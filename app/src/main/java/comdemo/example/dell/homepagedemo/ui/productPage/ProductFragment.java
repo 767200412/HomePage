@@ -3,6 +3,7 @@ package comdemo.example.dell.homepagedemo.ui.productPage;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import java.util.List;
 import comdemo.example.dell.homepagedemo.R;
 import comdemo.example.dell.homepagedemo.adapter.ProductAdapter;
 import comdemo.example.dell.homepagedemo.beans.Product;
+import comdemo.example.dell.homepagedemo.listener.EndlessRecyclerOnScrollListener;
 import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
 import comdemo.example.dell.homepagedemo.okhttp.request.RequestParams;
 import comdemo.example.dell.homepagedemo.request.RequestCenter;
@@ -48,6 +50,7 @@ public class ProductFragment extends Fragment {
     private LinearLayoutManager manager = new LinearLayoutManager(getContext()); // 定义一个线性布局管理器
     private ProductAdapter adapter;
     private RecyclerView recyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
 
     public ProductFragment() {
@@ -88,6 +91,30 @@ public class ProductFragment extends Fragment {
         init();
         initTab();
         initData();
+
+        //设置控件swipeRefreshLayout参数
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //下拉刷新的圆圈是否显示
+                swipeRefreshLayout.setRefreshing(false);
+                //取消下拉刷新
+                swipeRefreshLayout.setEnabled(true);
+                swipeRefreshLayout.stopNestedScroll();
+            }
+        });
+
+        recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+            @Override
+            public void onLoadMore() {
+                adapter.setLoadState(adapter.LOADING);
+                //加载新数据
+                new LoadDataThread().start();
+                adapter.setLoadState(adapter.LOADING_COMPLETE);
+            }
+        });
+
+
         return view;
     }
 
@@ -99,6 +126,7 @@ public class ProductFragment extends Fragment {
         Take = "10";
         fields = "Company,Images,Tags";
         recyclerView = (RecyclerView)view.findViewById(R.id.review);
+        swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe);
         // 设置布局管理器
         recyclerView.setLayoutManager(manager);
     }
@@ -136,6 +164,7 @@ public class ProductFragment extends Fragment {
         });
     }
 
+    //显示列表数据
     private void showMessage(){
 // 设置adapter
         if(Skip.equals("0")) {
@@ -145,6 +174,17 @@ public class ProductFragment extends Fragment {
             adapter.appendData(productList);
         }
         recyclerView.setAdapter(adapter);
+    }
+
+    //下拉加载数据
+    class LoadDataThread extends Thread {
+        @Override
+        public void run() {
+            int skip_n = Integer.valueOf(Skip);
+            skip_n += 10;
+            Skip = String.valueOf(skip_n);
+            initData();
+        }
     }
 
 }
