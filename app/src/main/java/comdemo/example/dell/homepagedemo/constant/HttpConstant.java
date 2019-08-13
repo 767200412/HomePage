@@ -34,4 +34,7 @@ public class HttpConstant {
     //获取新闻文章
     public static String GetPlatformArticleCategory = URL + "PlatformArticles/PlatformArticleCategory/List";
     public static String GetPlatformArticles = URL + "PlatformArticles/PlatformArticle/List";
+
+    //获取求购信息
+    public static String GetMarketTalks = URL +"MarketTalks";
 }

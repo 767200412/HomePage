@@ -10,10 +10,13 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -34,6 +37,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import comdemo.example.dell.homepagedemo.R;
+import comdemo.example.dell.homepagedemo.adapter.RecycleviewAdapter;
 import comdemo.example.dell.homepagedemo.beans.CategoryIdsByOr;
 import comdemo.example.dell.homepagedemo.beans.Data;
 import comdemo.example.dell.homepagedemo.beans.Header;
@@ -44,13 +49,12 @@ import comdemo.example.dell.homepagedemo.beans.Pageinfo;
 import comdemo.example.dell.homepagedemo.beans.Platformarticleselected;
 import comdemo.example.dell.homepagedemo.beans.Polymericcompanies;
 import comdemo.example.dell.homepagedemo.beans.Topdata;
-import comdemo.example.dell.homepagedemo.R;
-import comdemo.example.dell.homepagedemo.ui.loginPage.MainLoginActivity;
-import comdemo.example.dell.homepagedemo.utils.GlideImageLoader;
-import comdemo.example.dell.homepagedemo.adapter.RecycleviewAdapter;
 import comdemo.example.dell.homepagedemo.listener.EndlessRecyclerOnScrollListener;
 import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
 import comdemo.example.dell.homepagedemo.request.RequestCenter;
+import comdemo.example.dell.homepagedemo.ui.loginPage.MainLoginActivity;
+import comdemo.example.dell.homepagedemo.utils.GlideImageLoader;
+import comdemo.example.dell.homepagedemo.utils.HideScrollListener;
 import okhttp3.Response;
 
 
@@ -99,6 +103,12 @@ public class HomeFragment extends Fragment {
     private SharedPreferences sharedPreferences;//保存数据
     private SharedPreferences.Editor editor;
     private String id;
+    private HideScrollListener listener;
+    private static final int THRESHOLD = 50;
+    private int distance = 0;
+    private boolean visible = false;//是否可见
+    private TextView fab_company,fab_microshop;
+    private ConstraintLayout fab;
 
 
     @Override
@@ -191,6 +201,8 @@ public class HomeFragment extends Fragment {
         });
 
 
+
+        onHide();
         //公司列表下拉监听  分页加载
         mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
@@ -199,6 +211,26 @@ public class HomeFragment extends Fragment {
                 //加载新数据
                 new LoadDataThread().start();
                 adapter.setLoadState(adapter.LOADING_COMPLETE);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (distance > THRESHOLD && !visible) {
+                    //显示动画
+                    visible = true;
+                    onShow();
+                    distance = 0;
+                } else if (distance < -50 && visible) {
+                    //隐藏动画
+                    visible = false;
+                    onHide();
+                    distance = 0;
+                }
+
+                if (!visible && dy > 0 || (visible && dy < 0)) {
+                    distance += dy;
+                }
             }
         });
         return view;
@@ -217,6 +249,10 @@ public class HomeFragment extends Fragment {
         btn_log = (Button)view.findViewById(R.id.log);
         constraintLayout = (ConstraintLayout)view.findViewById(R.id.cs_bottom);
         tv_news=(TextView)view.findViewById(R.id.tv_news);
+        fab_company = (TextView)view.findViewById(R.id.fab_company);
+        fab_microshop = (TextView)view.findViewById(R.id.fab_microshop);
+        fab = (ConstraintLayout)view.findViewById(R.id.constraintLayout_fab);
+
     }
 
     //判断是否登录 决定下方浮层的显、隐
@@ -444,6 +480,22 @@ public class HomeFragment extends Fragment {
             initCompany();
         }
     }
+
+
+
+    public void onHide() {
+        //隐藏动画
+
+        fab.animate().translationY(fab.getHeight()).setInterpolator(new AccelerateInterpolator(3));
+    }
+
+
+    public void onShow() {
+
+        fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(3));
+    }
+
+
 
 
 }

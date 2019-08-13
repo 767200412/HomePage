@@ -2,6 +2,7 @@ package comdemo.example.dell.homepagedemo.ui.mainPage;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
@@ -27,6 +28,7 @@ public class NewsActivity extends AppCompatActivity {
 
     private android.support.design.widget.TabLayout topTab;
     private android.support.v7.widget.RecyclerView newsRecycle;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private ImageView imageView_back;
     private List<NewsTab>  tabList ;
     private List<News> newsList;
@@ -104,6 +106,18 @@ public class NewsActivity extends AppCompatActivity {
             }
         });
 
+        //设置控件swipeRefreshLayout参数
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                //下拉刷新的圆圈是否显示
+                swipeRefreshLayout.setRefreshing(false);
+                //取消下拉刷新
+                swipeRefreshLayout.setEnabled(true);
+                swipeRefreshLayout.stopNestedScroll();
+            }
+        });
+
     }
 
 
@@ -112,6 +126,7 @@ public class NewsActivity extends AppCompatActivity {
         newsRecycle = (android.support.v7.widget.RecyclerView) findViewById(R.id.review);
         imageView_back = (ImageView)findViewById(R.id.imageView_back);
         requestCenter = new RequestCenter(this);
+        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.n_scroll_view);
     }
 
     //获取标签

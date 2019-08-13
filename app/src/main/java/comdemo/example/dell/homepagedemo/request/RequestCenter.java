@@ -177,5 +177,9 @@ public class RequestCenter {
         RequestCenter.getRequest(HttpConstant.GetPlatformArticles,params,listener,null);
     }
 
+    public static void GetMarketTalks(RequestParams params,DisposeDataListener listener){
+        RequestCenter.getRequest(HttpConstant.GetMarketTalks,params,listener,null);
+    }
+
 
 }
