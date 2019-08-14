@@ -177,9 +177,14 @@ public class RequestCenter {
         RequestCenter.getRequest(HttpConstant.GetPlatformArticles,params,listener,null);
     }
 
+    //获取供应信息列表
     public static void GetMarketTalks(RequestParams params,DisposeDataListener listener){
         RequestCenter.getRequest(HttpConstant.GetMarketTalks,params,listener,null);
     }
 
+    //获取求购信息列表
+    public static  void GetBiddings(RequestParams params,DisposeDataListener listener){
+        RequestCenter.getRequest(HttpConstant.GetBiddings,params,listener,null);
+    }
 
 }

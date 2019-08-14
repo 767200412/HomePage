@@ -21,9 +21,9 @@ import comdemo.example.dell.homepagedemo.R;
 import comdemo.example.dell.homepagedemo.beans.Company;
 import comdemo.example.dell.homepagedemo.beans.Images;
 import comdemo.example.dell.homepagedemo.beans.Product;
-import comdemo.example.dell.homepagedemo.beans.Tags;
+import comdemo.example.dell.homepagedemo.beans.Types;
 
-public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context mContext;
     private List<Product> mItemList;
@@ -42,7 +42,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public final int LOADING_END = 3;
 
 
-    public ProductAdapter(Context context, List<Product> entityList){
+    public Product_buyAdapter(Context context, List<Product> entityList){
         this.mContext = context;
         this.mItemList = entityList;
     }
@@ -70,7 +70,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         //进行判断显示类型，来创建返回不同的View
         if (viewType == TYPE_ITEM) {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.product, parent, false);
+            View view = LayoutInflater.from(mContext).inflate(R.layout.product_buy, parent, false);
             return new RecycleviewViewHolder(view);
         }
         else if(viewType == TYPE_FOOTER) {
@@ -90,54 +90,68 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             RequestOptions requestOptions = new RequestOptions()
                     .circleCrop()
                     .error(recycleviewViewHolder.error);
-
+            //显示小型的圆形头像
             Glide.with(mContext)
                     .load(company.getLogoUrl())
                     .apply(requestOptions)
                     .into(recycleviewViewHolder.image_icon);
-            ((RecycleviewViewHolder) holder).tv_name.setText(company.getName());
-            ((RecycleviewViewHolder) holder).tv_time.setText(product.getCreatedTime().substring(0,9));
+            //求购人的名字
+            recycleviewViewHolder.tv_name.setText(company.getName());
+            //右上角的发布时间
+            recycleviewViewHolder.tv_time.setText(product.getPublishTime().substring(0,9));
+            //求购描述
             String content =null;
-            content = product.getContent();
+            content = product.getDescription();
             if(content != null) {
-               ((RecycleviewViewHolder) holder).tv_title.setText(product.getContent());
+                recycleviewViewHolder.tv_title.setText(product.getDescription());
             }
             else {
                 recycleviewViewHolder.tv_title.setText("");
             }
-            List<Tags> tagsList = product.getTags();
-            ((RecycleviewViewHolder) holder).Customized.setVisibility(View.INVISIBLE);
-            ((RecycleviewViewHolder) holder).posts.setVisibility(View.INVISIBLE);
-            ((RecycleviewViewHolder) holder).promotion.setVisibility(View.INVISIBLE);
-            ((RecycleviewViewHolder) holder).sample.setVisibility(View.INVISIBLE);
+            //求购的类型
+            List<Types> tagsList = product.getTypes();
+            recycleviewViewHolder.Customized.setVisibility(View.INVISIBLE);
+            recycleviewViewHolder.posts.setVisibility(View.INVISIBLE);
+            recycleviewViewHolder.promotion.setVisibility(View.INVISIBLE);
+            recycleviewViewHolder.sample.setVisibility(View.INVISIBLE);
             TextView[] textViews = new TextView[]{
-                    ((RecycleviewViewHolder) holder).Customized,
-                    ((RecycleviewViewHolder) holder).posts,
-                    ((RecycleviewViewHolder) holder).promotion,
-                    ((RecycleviewViewHolder) holder).sample};
+                    recycleviewViewHolder.Customized,
+                    recycleviewViewHolder.posts,
+                    recycleviewViewHolder.promotion,
+                    recycleviewViewHolder.sample};
             int Length = tagsList.size();
             for(int i = 0 ; i<Length;i++){
                 textViews[i].setVisibility(View.VISIBLE);
             }
             int a = 0;
-            for(Tags tag:tagsList){
-                textViews[a].setText(tag.getName());
+            for(Types type:tagsList){
+                textViews[a].setText(type.getName());
                 a++;
             }
+
+            //图片展示
             List<Images> images = product.getImages();
 
                 for(Images image:images){
-                    ((RecycleviewViewHolder) holder).Lsview = LayoutInflater.from(mContext).inflate(R.layout.image_show, null);
-                    ((RecycleviewViewHolder) holder).image_show = ((RecycleviewViewHolder) holder).Lsview.findViewById(R.id.image_show);
+                    recycleviewViewHolder.Lsview = LayoutInflater.from(mContext).inflate(R.layout.image_show, null);
+                    recycleviewViewHolder.image_show = ((RecycleviewViewHolder) holder).Lsview.findViewById(R.id.image_show);
                     if(images != null){
-                    String url = image.getOriginalPath();
+                    String url = image.getImgUri();
                     Glide.with(mContext)
                             .load(url)
                             .apply(new RequestOptions().error(recycleviewViewHolder.error))
                             .into(((RecycleviewViewHolder) holder).image_show);
-                    ((RecycleviewViewHolder) holder).linearLayout.addView(((RecycleviewViewHolder) holder).Lsview);
+                        recycleviewViewHolder.linearLayout.addView(recycleviewViewHolder.Lsview);
                 }
             }
+
+
+            //需要的数量
+            String number = "数量:"+product.getQtyUnit();
+            recycleviewViewHolder.qtyUnit.setText(number);
+            //交货时间
+            String dtime = "交货时间:"+ product.getDeliveryTime().substring(0,9);
+            recycleviewViewHolder.deliveryTime.setText(dtime);
 
 
         }
@@ -182,6 +196,8 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private TextView collection;//是否收藏
         private ImageView image_collection;//是否收藏图标
         private TextView tv_title;//求购的标题
+        private TextView qtyUnit;//需要数量
+        private TextView deliveryTime;//交货时间
         private TextView Customized;//定制
         private TextView posts;//现货
         private TextView promotion;//促销
@@ -209,6 +225,8 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
            promotion = (TextView)itemView.findViewById(R.id.promotion);
            sample = (TextView)itemView.findViewById(R.id.sample);
            linearLayout = (LinearLayout)itemView.findViewById(R.id.liner);
+           qtyUnit = (TextView)itemView.findViewById(R.id.qtyUnit);
+           deliveryTime = (TextView)itemView.findViewById(R.id.deliveryTime);
            Lsview = LayoutInflater.from(mContext).inflate(R.layout.image_show, null);
            image_show = Lsview.findViewById(R.id.image_show);
 
