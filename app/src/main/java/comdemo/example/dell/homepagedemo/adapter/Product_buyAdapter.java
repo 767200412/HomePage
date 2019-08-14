@@ -1,6 +1,9 @@
 package comdemo.example.dell.homepagedemo.adapter;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +18,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import comdemo.example.dell.homepagedemo.R;
@@ -22,6 +26,7 @@ import comdemo.example.dell.homepagedemo.beans.Company;
 import comdemo.example.dell.homepagedemo.beans.Images;
 import comdemo.example.dell.homepagedemo.beans.Product;
 import comdemo.example.dell.homepagedemo.beans.Types;
+import comdemo.example.dell.homepagedemo.ui.utils.ShowImageActivity;
 
 public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -84,7 +89,7 @@ public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof RecycleviewViewHolder) {
-            RecycleviewViewHolder recycleviewViewHolder = (RecycleviewViewHolder)holder;
+            final RecycleviewViewHolder recycleviewViewHolder = (RecycleviewViewHolder)holder;
             Product product = mItemList.get(position);
             Company company = product.getCompany();
             RequestOptions requestOptions = new RequestOptions()
@@ -132,17 +137,33 @@ public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             //图片展示
             List<Images> images = product.getImages();
 
-                for(Images image:images){
+                for(final Images image:images){
                     recycleviewViewHolder.Lsview = LayoutInflater.from(mContext).inflate(R.layout.image_show, null);
                     recycleviewViewHolder.image_show = ((RecycleviewViewHolder) holder).Lsview.findViewById(R.id.image_show);
-                    if(images != null){
-                    String url = image.getImgUri();
-                    Glide.with(mContext)
+
+                    if(image != null&& !image.getImgUri().equals(null)){
+                        recycleviewViewHolder.urls.add(image.getImgUri());
+                        String url = image.getImgUri();
+                        Glide.with(mContext)
                             .load(url)
                             .apply(new RequestOptions().error(recycleviewViewHolder.error))
                             .into(((RecycleviewViewHolder) holder).image_show);
-                        recycleviewViewHolder.linearLayout.addView(recycleviewViewHolder.Lsview);
-                }
+                         recycleviewViewHolder.linearLayout.addView(recycleviewViewHolder.Lsview);
+
+                        //设置图片的点击放大效果
+                        recycleviewViewHolder.image_show.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(v.getContext(), ShowImageActivity.class);
+                                intent.putStringArrayListExtra("url", recycleviewViewHolder.urls);
+                                v.getContext().startActivity(
+                                        intent,
+                                        // 注意这里的sharedView
+                                        // Content，View（动画作用view），String（和XML一样）
+                                        ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext(), v, "sharedView").toBundle());
+                             }
+                        });
+                    }
             }
 
 
@@ -206,6 +227,8 @@ public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         private View Lsview;
         private ImageView image_show;
         private Drawable error;
+        private ImageView show_big;
+        private ArrayList<String> urls = new ArrayList<String>();
 
 
 

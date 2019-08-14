@@ -13,6 +13,7 @@
         android:layout_marginLeft="16dp"
         android:background="@color/background"
         android:scaleType="center"
-        android:src="@mipmap/ic_placeholder_fail" />
+        android:src="@mipmap/ic_placeholder_fail"
+        android:transitionName="sharedView"/>
 
 </LinearLayout>

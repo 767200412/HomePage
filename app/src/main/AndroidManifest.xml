@@ -30,7 +30,8 @@
         <activity android:name=".ui.loginPage.NewPassword" />
         <activity android:name=".ui.loginPage.ForgetVeriyActivity" />
         <activity android:name=".ui.loginPage.LoginVerifyActivity" />
-        <activity android:name=".ui.mainPage.NewsActivity"></activity>
+        <activity android:name=".ui.mainPage.NewsActivity" />
+        <activity android:name=".ui.utils.ShowImageActivity"></activity>
     </application>
 
 </manifest>

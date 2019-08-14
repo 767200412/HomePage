@@ -1,6 +1,9 @@
 package comdemo.example.dell.homepagedemo.adapter;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +18,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import comdemo.example.dell.homepagedemo.R;
@@ -22,6 +26,7 @@ import comdemo.example.dell.homepagedemo.beans.Company;
 import comdemo.example.dell.homepagedemo.beans.Images;
 import comdemo.example.dell.homepagedemo.beans.Product;
 import comdemo.example.dell.homepagedemo.beans.Tags;
+import comdemo.example.dell.homepagedemo.ui.utils.ShowImageActivity;
 
 public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -84,7 +89,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof RecycleviewViewHolder) {
-            RecycleviewViewHolder recycleviewViewHolder = (RecycleviewViewHolder)holder;
+            final RecycleviewViewHolder recycleviewViewHolder = (RecycleviewViewHolder)holder;
             Product product = mItemList.get(position);
             Company company = product.getCompany();
             RequestOptions requestOptions = new RequestOptions()
@@ -105,6 +110,8 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             else {
                 recycleviewViewHolder.tv_title.setText("");
             }
+
+            //标签
             List<Tags> tagsList = product.getTags();
             ((RecycleviewViewHolder) holder).Customized.setVisibility(View.INVISIBLE);
             ((RecycleviewViewHolder) holder).posts.setVisibility(View.INVISIBLE);
@@ -124,22 +131,41 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 textViews[a].setText(tag.getName());
                 a++;
             }
-            List<Images> images = product.getImages();
 
-                for(Images image:images){
-                    ((RecycleviewViewHolder) holder).Lsview = LayoutInflater.from(mContext).inflate(R.layout.image_show, null);
-                    ((RecycleviewViewHolder) holder).image_show = ((RecycleviewViewHolder) holder).Lsview.findViewById(R.id.image_show);
-                    if(images != null){
+            //图片显示
+            List<Images> images = product.getImages();
+            for(final Images image:images) {
+                ((RecycleviewViewHolder) holder).Lsview = LayoutInflater.from(mContext).inflate(R.layout.image_show, null);
+                ((RecycleviewViewHolder) holder).image_show = ((RecycleviewViewHolder) holder).Lsview.findViewById(R.id.image_show);
+                //recycleviewViewHolder.show_big=LayoutInflater.from(mContext).inflate(R.layout.activity_show_image,null).findViewById(R.id.show);
+                if (image != null && !image.getOriginalPath().equals(null)) {
+                    recycleviewViewHolder.urls.add(image.getOriginalPath());
                     String url = image.getOriginalPath();
+                    //显示图片
                     Glide.with(mContext)
                             .load(url)
                             .apply(new RequestOptions().error(recycleviewViewHolder.error))
                             .into(((RecycleviewViewHolder) holder).image_show);
+
                     ((RecycleviewViewHolder) holder).linearLayout.addView(((RecycleviewViewHolder) holder).Lsview);
+
+                    //设置图片的点击放大效果
+                    recycleviewViewHolder.image_show.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(v.getContext(), ShowImageActivity.class);
+                            intent.putStringArrayListExtra("url", recycleviewViewHolder.urls);
+                            v.getContext().startActivity(
+                                    intent,
+                                    // 注意这里的sharedView
+                                    // Content，View（动画作用view），String（和XML一样）
+                                    ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext(), v, "sharedView").toBundle());
+                        }
+                    });
+
+
                 }
             }
-
-
         }
         else if (holder instanceof FootViewHolder) {
             FootViewHolder footViewHolder = (FootViewHolder) holder;
@@ -189,7 +215,9 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         private LinearLayout linearLayout;
         private View Lsview;
         private ImageView image_show;
+        private ImageView show_big;
         private Drawable error;
+        private ArrayList<String> urls = new ArrayList<String>();
 
 
 
