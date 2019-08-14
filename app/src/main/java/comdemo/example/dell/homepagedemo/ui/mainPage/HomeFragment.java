@@ -10,10 +10,13 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
@@ -34,6 +37,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import comdemo.example.dell.homepagedemo.R;
+import comdemo.example.dell.homepagedemo.adapter.RecycleviewAdapter;
 import comdemo.example.dell.homepagedemo.beans.CategoryIdsByOr;
 import comdemo.example.dell.homepagedemo.beans.Data;
 import comdemo.example.dell.homepagedemo.beans.Header;
@@ -44,13 +49,12 @@ import comdemo.example.dell.homepagedemo.beans.Pageinfo;
 import comdemo.example.dell.homepagedemo.beans.Platformarticleselected;
 import comdemo.example.dell.homepagedemo.beans.Polymericcompanies;
 import comdemo.example.dell.homepagedemo.beans.Topdata;
-import comdemo.example.dell.homepagedemo.R;
-import comdemo.example.dell.homepagedemo.ui.loginPage.MainLoginActivity;
-import comdemo.example.dell.homepagedemo.utils.GlideImageLoader;
-import comdemo.example.dell.homepagedemo.adapter.RecycleviewAdapter;
 import comdemo.example.dell.homepagedemo.listener.EndlessRecyclerOnScrollListener;
 import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
 import comdemo.example.dell.homepagedemo.request.RequestCenter;
+import comdemo.example.dell.homepagedemo.ui.loginPage.MainLoginActivity;
+import comdemo.example.dell.homepagedemo.utils.GlideImageLoader;
+import comdemo.example.dell.homepagedemo.utils.HideScrollListener;
 import okhttp3.Response;
 
 
@@ -69,6 +73,7 @@ public class HomeFragment extends Fragment {
     private HorizontalScrollView hs;//推荐品牌滚动
     private LinearLayout linearLayout;//推荐品牌滚动
     private TextView tv_name;//品牌的名字
+    private TextView tv_news;//新闻
     private ImageView imageView;//品牌的图标
     private SwipeRefreshLayout swipeRefreshLayout;
     private android.support.design.widget.TabLayout mytab;
@@ -98,6 +103,12 @@ public class HomeFragment extends Fragment {
     private SharedPreferences sharedPreferences;//保存数据
     private SharedPreferences.Editor editor;
     private String id;
+    private HideScrollListener listener;
+    private static final int THRESHOLD = 50;
+    private int distance = 0;
+    private boolean visible = false;//是否可见
+    private TextView fab_company,fab_microshop;
+    private ConstraintLayout fab;
 
 
     @Override
@@ -138,6 +149,15 @@ public class HomeFragment extends Fragment {
         mRecyclerView.setLayoutManager(manager);
         //加载公司数据
         initCompany();
+
+        //新闻
+        tv_news.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),NewsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         //立即登录按钮监听
         btn_log.setOnClickListener(new View.OnClickListener() {
@@ -181,6 +201,8 @@ public class HomeFragment extends Fragment {
         });
 
 
+
+
         //公司列表下拉监听  分页加载
         mRecyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
@@ -190,7 +212,39 @@ public class HomeFragment extends Fragment {
                 new LoadDataThread().start();
                 adapter.setLoadState(adapter.LOADING_COMPLETE);
             }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                //onHide();
+                if (distance > THRESHOLD && !visible) {
+                    //显示动画
+                    visible = true;
+                    fab.setVisibility(View.VISIBLE);
+                    //onShow();
+                    distance = 0;
+                } else if (distance < -50 && visible) {
+                    //隐藏动画
+                    visible = false;
+                    fab.setVisibility(View.GONE);
+                   // onHide();
+                    distance = 0;
+                }
+
+                if (!visible && dy > 0 || (visible && dy < 0)) {
+                    distance += dy;
+                }
+            }
         });
+
+        //回到安顶部
+        fab_company.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRecyclerView.smoothScrollToPosition(0);
+            }
+        });
+
         return view;
     }
 
@@ -206,6 +260,11 @@ public class HomeFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.review);
         btn_log = (Button)view.findViewById(R.id.log);
         constraintLayout = (ConstraintLayout)view.findViewById(R.id.cs_bottom);
+        tv_news=(TextView)view.findViewById(R.id.tv_news);
+        fab_company = (TextView)view.findViewById(R.id.fab_company);
+        fab_microshop = (TextView)view.findViewById(R.id.fab_microshop);
+        fab = (ConstraintLayout)view.findViewById(R.id.constraintLayout_fab);
+        fab.setVisibility(View.GONE);
     }
 
     //判断是否登录 决定下方浮层的显、隐
@@ -294,10 +353,10 @@ public class HomeFragment extends Fragment {
     }
     //显示 最上方 滚动图片广告
     public void showAd(){
-        //banner = (Banner)view.findViewById(R.id.tv_ad);
+        //设置图片集合
+        banner.setImages(images);
         //设置图片加载器
         banner.setImageLoader(new GlideImageLoader());
-        //banner.setBannerTitles(titles);
         //banner.setBannerStyle(BannerConfig.NUM_INDICATOR_TITLE);
         //设置图片集合
         banner.setImages(images);
@@ -433,6 +492,22 @@ public class HomeFragment extends Fragment {
             initCompany();
         }
     }
+
+
+
+    public void onHide() {
+        //隐藏动画
+
+        fab.animate().translationY(fab.getHeight()).setInterpolator(new AccelerateInterpolator(3));
+    }
+
+
+    public void onShow() {
+
+        fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(3));
+    }
+
+
 
 
 }

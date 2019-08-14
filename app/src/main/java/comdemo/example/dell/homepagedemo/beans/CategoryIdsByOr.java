@@ -4,6 +4,7 @@ public class CategoryIdsByOr {
 
     private String categoryIdsByOr;
 
+
     public String getCategoryIdsByOr() {
         return categoryIdsByOr;
     }

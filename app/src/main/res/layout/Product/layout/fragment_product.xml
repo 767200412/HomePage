@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/background">
+        <LinearLayout
+            android:layout_gravity="top"
+            app:layout_collapseMode="pin"
+            android:id="@+id/linear_hear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/colorWhite"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <TextView
+                android:id="@+id/supplyAndDemandMarket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="供求市场"
+                android:textColor="#ffff8f43"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:padding="0dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="4dp"
+                android:layout_weight="6"/>
+
+            <TextView
+                android:id="@+id/electronicStore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="0dp"
+                android:text="电子商场"
+                android:textColor="#ff888888"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="24dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="3"/>
+
+            <EditText
+                android:id="@+id/edit_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@mipmap/nav_ic_search_g"
+                android:background="@drawable/edit_search_shape"
+                android:hint="搜索"
+                android:textColorHint="#ff999999"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="29dp"
+                android:drawablePadding="4dp"
+                android:paddingLeft="10dp"
+                android:layout_weight="24"/>
+            <TextView
+                android:id="@+id/screen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="筛选"
+                android:textColor="#ff238efa"
+                android:textSize="16sp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="18dp"/>
+
+            <TextView
+                android:id="@+id/nav_ic_screening"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/nav_ic_screening"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="12dp"/>
+        </LinearLayout>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/top_tab"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabBackground="@color/colorWhite"
+            app:tabIndicatorColor="#ff238efa"
+            app:tabIndicatorFullWidth="false"
+            app:tabIndicatorHeight="3dp"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="#ff238efa"
+            app:tabTextColor="#ff000000"></android.support.design.widget.TabLayout>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorWhite"
+            android:layout_marginTop="8dp">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/review"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/ic_buy_new"
+        android:layout_marginBottom="115dp"
+        android:layout_marginRight="13dp"
+        android:layout_gravity="bottom|right"/>
+
+
+</FrameLayout >

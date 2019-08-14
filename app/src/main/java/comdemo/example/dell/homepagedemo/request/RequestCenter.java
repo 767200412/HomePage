@@ -35,6 +35,8 @@ public class RequestCenter {
                 new DisposeDataHandle(listener,clazz));
     }
 
+
+
     //
     //根据参数发送所有的post请求
     private static void postRequest(String url, RequestParams params,
@@ -166,5 +168,23 @@ public class RequestCenter {
         RequestCenter.postRequest(HttpConstant.ResetPassword,params,listener,null);
     }
 
+    //获取新闻标签
+    public static void GetPlatformArticleCategory(RequestParams params,DisposeDataListener listener){
+        RequestCenter.getRequest(HttpConstant.GetPlatformArticleCategory,params,listener,null);
+    }
+
+    public static void GetPlatformArticles(RequestParams params,DisposeDataListener listener){
+        RequestCenter.getRequest(HttpConstant.GetPlatformArticles,params,listener,null);
+    }
+
+    //获取供应信息列表
+    public static void GetMarketTalks(RequestParams params,DisposeDataListener listener){
+        RequestCenter.getRequest(HttpConstant.GetMarketTalks,params,listener,null);
+    }
+
+    //获取求购信息列表
+    public static  void GetBiddings(RequestParams params,DisposeDataListener listener){
+        RequestCenter.getRequest(HttpConstant.GetBiddings,params,listener,null);
+    }
 
 }

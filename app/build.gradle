@@ -26,6 +26,7 @@ android {
                     [
                             'src/main/res/layout/HomePage',
                             'src/main/res/layout/Login',
+                            'src/main/res/layout/Product',
                             'src/main/res'
                     ]
         }
@@ -43,10 +44,13 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.squareup.okhttp3:okhttp:4.0.1'
     implementation 'com.google.code.gson:gson:2.8.1'
-    //图片轮播框架
+    //图片轮播框架 https://github.com/youth5201314/banner
     implementation 'com.youth.banner:banner:1.4.10'
     //glide，比较好的版本，Matisse版本，配合glide3.7.0，因为后面的glide版本没有了asbitmap等方法
     implementation 'com.github.bumptech.glide:glide:3.7.0'
+    //一个Android转换库，为Glide提供各种图像转换。https://github.com/wasabeef/glide-transformations
+    implementation 'jp.wasabeef:glide-transformations:3.3.0'
+
     //文字滚动 https://github.com/sunfusheng/MarqueeView
     implementation 'com.sunfusheng:marqueeview:1.3.2'
     //使用recyclebiew

@@ -229,7 +229,6 @@ public class VerificationLog extends AppCompatActivity {
         });
     }
 
-
     //获取6位手机短信验证码
     private void GetLoginVerifyCode(){
         JSONObject param_getRegister = new JSONObject();

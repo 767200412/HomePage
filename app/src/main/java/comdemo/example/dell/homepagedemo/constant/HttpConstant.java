@@ -6,7 +6,7 @@ package comdemo.example.dell.homepagedemo.constant;
 
 public class HttpConstant {
     private static final String URL = "http://devapi.fccn.cc/Api/v1.1/";
-
+    private static final String URL2 = "http://devapi.fccn.cc/Api/v1/";
     //登录
     public static String Login = URL + "Account/Login";
     //获取数据
@@ -30,4 +30,13 @@ public class HttpConstant {
     public static String SendResetPasswordVerifyCodeByPhone = URL + "Account/GetResetPasswordVerifyCodeByPhone";
     public static String CheckSendResetPasswordVerifyCodeByPhone =URL + "Account/CheckResetPasswordVerifyCodeByPhone";
     public static String ResetPassword = URL + "Account/ResetPassword";
+
+    //获取新闻文章
+    public static String GetPlatformArticleCategory = URL + "PlatformArticles/PlatformArticleCategory/List";
+    public static String GetPlatformArticles = URL + "PlatformArticles/PlatformArticle/List";
+
+    //获取供应购信息
+    public static String GetMarketTalks = URL +"MarketTalks";
+    //求购列表
+    public static String GetBiddings = URL2 + "Biddings";
 }
