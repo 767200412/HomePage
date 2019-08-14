@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -56,6 +57,9 @@ public class ProductFragment extends Fragment {
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private String Toptab;//标签的名字
+    private TextView fab;
+    private String buy_new = "";
+    private String publish_supply = "";
 
 
     public ProductFragment() {
@@ -128,10 +132,13 @@ public class ProductFragment extends Fragment {
                  Toptab = tab.getText().toString();
                  switch(Toptab){
                      case "求购":
-
+                         //设置悬浮按钮
+                         fab.setBackgroundResource(R.mipmap.ic_buy_new);
                          initBuy();
                          break;
                      case "供应":
+                         //设置悬浮按钮
+                         fab.setBackgroundResource(R.mipmap.ic_publish_supply);
                          initData();
                          break;
                  }
@@ -162,6 +169,9 @@ public class ProductFragment extends Fragment {
         swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.swipe);
         // 设置布局管理器
         recyclerView.setLayoutManager(manager);
+        fab = (TextView)view.findViewById(R.id.fab);
+        //默认显示供应页面
+        fab.setBackgroundResource(R.mipmap.ic_publish_supply);
     }
     //设置顶部标签
     private void initTab(){

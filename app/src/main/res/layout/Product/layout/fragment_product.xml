@@ -112,5 +112,14 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/ic_buy_new"
+        android:layout_marginBottom="115dp"
+        android:layout_marginRight="13dp"
+        android:layout_gravity="bottom|right"/>
+
 
 </FrameLayout >
