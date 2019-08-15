@@ -121,7 +121,7 @@ public class ProductFragment extends Fragment {
                 adapter.setLoadState(adapter.LOADING);
                 //加载新数据
                 new LoadDataThread().start();
-                adapter.setLoadState(adapter.LOADING_COMPLETE);
+
             }
         });
 
@@ -134,11 +134,13 @@ public class ProductFragment extends Fragment {
                      case "求购":
                          //设置悬浮按钮
                          fab.setBackgroundResource(R.mipmap.ic_buy_new);
+                         Skip = "0";
                          initBuy();
                          break;
                      case "供应":
                          //设置悬浮按钮
                          fab.setBackgroundResource(R.mipmap.ic_publish_supply);
+                         Skip = "0";
                          initData();
                          break;
                  }
@@ -172,6 +174,7 @@ public class ProductFragment extends Fragment {
         fab = (TextView)view.findViewById(R.id.fab);
         //默认显示供应页面
         fab.setBackgroundResource(R.mipmap.ic_publish_supply);
+        Toptab = "供应";
     }
     //设置顶部标签
     private void initTab(){
@@ -228,7 +231,9 @@ public class ProductFragment extends Fragment {
                 }
                 Gson gson = new Gson();
                 productList = gson.fromJson(re,new TypeToken<List<Product>>() {}.getType());
-                showBuyMessage();
+                if(productList!=null) {
+                    showBuyMessage();
+                }
             }
 
             @Override
@@ -243,11 +248,11 @@ public class ProductFragment extends Fragment {
 // 设置adapter
         if(Skip.equals("0")) {
             adapter = new ProductAdapter(getContext(), productList);
+            recyclerView.setAdapter(adapter);
         }
         else {
             adapter.appendData(productList);
         }
-        recyclerView.setAdapter(adapter);
     }
 
     //显示求购列表数据
@@ -255,11 +260,11 @@ public class ProductFragment extends Fragment {
 // 设置adapter
         if(Skip.equals("0")) {
             adapter2 = new Product_buyAdapter(getContext(), productList);
+            recyclerView.setAdapter(adapter2);
         }
         else {
             adapter2.appendData(productList);
         }
-        recyclerView.setAdapter(adapter2);
     }
 
     //下拉加载数据

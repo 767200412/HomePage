@@ -136,6 +136,7 @@ public class HomeFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
                 //下拉刷新的圆圈是否显示
                 swipeRefreshLayout.setRefreshing(false);
                 //取消下拉刷新
@@ -214,7 +215,6 @@ public class HomeFragment extends Fragment {
                 adapter.setLoadState(adapter.LOADING);
                 //加载新数据
                 new LoadDataThread().start();
-                adapter.setLoadState(adapter.LOADING_COMPLETE);
             }
 
             @Override
@@ -241,7 +241,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        //回到安顶部
+        //回到顶部
         fab_company.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -509,18 +509,14 @@ public class HomeFragment extends Fragment {
 
     //显示公司列表
     public void initRecyclerView(){
-//        // 定义一个线性布局管理器
-//        LinearLayoutManager manager = new LinearLayoutManager(getContext());
-//        // 设置布局管理器
-//        mRecyclerView.setLayoutManager(manager);
         // 设置adapter
         if(skip ==0) {
             adapter = new RecycleviewAdapter(getContext(), items4);
+            mRecyclerView.setAdapter(adapter);
         }
         else {
             adapter.appendData(items4);
         }
-        mRecyclerView.setAdapter(adapter);
     }
 
     //下拉加载数据
