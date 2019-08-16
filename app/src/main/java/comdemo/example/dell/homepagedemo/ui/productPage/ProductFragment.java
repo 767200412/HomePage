@@ -26,6 +26,7 @@ import comdemo.example.dell.homepagedemo.listener.EndlessRecyclerOnScrollListene
 import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
 import comdemo.example.dell.homepagedemo.okhttp.request.RequestParams;
 import comdemo.example.dell.homepagedemo.request.RequestCenter;
+import comdemo.example.dell.homepagedemo.ui.dialog.BuyDialog;
 import okhttp3.Response;
 
 /**
@@ -58,6 +59,7 @@ public class ProductFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private String Toptab;//标签的名字
     private TextView fab;
+    private BuyDialog buyDialog;
     private String buy_new = "";
     private String publish_supply = "";
 
@@ -156,6 +158,8 @@ public class ProductFragment extends Fragment {
 
             }
         });
+
+
 
         return view;
     }
@@ -261,6 +265,7 @@ public class ProductFragment extends Fragment {
         if(Skip.equals("0")) {
             adapter2 = new Product_buyAdapter(getContext(), productList);
             recyclerView.setAdapter(adapter2);
+
         }
         else {
             adapter2.appendData(productList);
@@ -284,5 +289,25 @@ public class ProductFragment extends Fragment {
             }
         }
     }
+
+    //显示详细信息
+    private void detail(Product product){
+        buyDialog = new BuyDialog(getContext(),R.style.MyDialog2);
+        buyDialog.setData(product);
+        buyDialog.setFinishOnclickListener(new BuyDialog.onFinishOnclickListener() {
+            @Override
+            public void onFinishClick() {
+                buyDialog.dismiss();
+            }
+        });
+        buyDialog.setGetOnclickListener(new BuyDialog.onGetOnclickListener() {
+            @Override
+            public void onGetClick() {
+                //处理马上接单点击事件
+            }
+        });
+    }
+
+
 
 }

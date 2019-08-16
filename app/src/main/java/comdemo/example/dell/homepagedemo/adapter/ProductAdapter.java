@@ -203,7 +203,6 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         private TextView tv_name;//名字
         private ImageView image_icon;//图标
-        private TextView tv_type;//发布人类型
         private TextView tv_time;//发布时间
         private TextView collection;//是否收藏
         private ImageView image_collection;//是否收藏图标
@@ -228,7 +227,6 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             tv_title = (TextView)itemView.findViewById(R.id.tv_title);
            tv_name = (TextView)itemView.findViewById(R.id.tv_name);
            image_icon = (ImageView)itemView.findViewById(R.id.image_icon);
-           tv_type = (TextView)itemView.findViewById(R.id.tv_type);
            tv_time = (TextView)itemView.findViewById(R.id.tv_time);
            collection = (TextView)itemView.findViewById(R.id.collection);
            image_collection = (ImageView)itemView.findViewById(R.id.image_collection);

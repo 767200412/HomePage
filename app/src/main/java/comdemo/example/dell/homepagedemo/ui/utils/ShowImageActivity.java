@@ -25,6 +25,7 @@ public class ShowImageActivity extends AppCompatActivity  {
     private ViewPager viewPager;
     private MyPagerAdapter mAdapter;
     private ArrayList<String> urls = new ArrayList<>();
+    private String position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +35,12 @@ public class ShowImageActivity extends AppCompatActivity  {
         viewPager = (ViewPager)findViewById(R.id.show);
         Intent intent = getIntent();
         urls =intent.getStringArrayListExtra("url");
+        position = intent.getStringExtra("position");
         Log.e("urls", String.valueOf(urls));
         mAdapter = new MyPagerAdapter(urls);
         viewPager.setAdapter(mAdapter);
+        int index = urls.indexOf(position);
+        viewPager.setCurrentItem(index);
         String s = viewPager.getCurrentItem()+1 + "/" +urls.size();
         number.setText(s);
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {

@@ -3,15 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000">
-    <TextView
-        android:id="@+id/number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#ffffff"
-        android:textSize="18sp"
-        android:layout_gravity="top|center"
-        android:background="@null"
-        />
 
     <!--注意这里的sharedView-->
     <android.support.v4.view.ViewPager
@@ -20,4 +11,14 @@
         android:layout_height="match_parent"
         android:src="@mipmap/ic_launcher"
         android:transitionName="sharedView" />
+
+    <TextView
+        android:id="@+id/number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#eef5f5"
+        android:textSize="18sp"
+        android:layout_gravity="top|center"
+        android:background="@null"
+        />
 </FrameLayout>
