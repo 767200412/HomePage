@@ -42,11 +42,13 @@ public class ChainTypeActivity extends AppCompatActivity {
         setListener();
     }
 
+    //初始化
     private void init(){
         ls = (ListView)findViewById(R.id.ls);
         requestCenter = new RequestCenter(this);
     }
 
+    //获取供应链信息 并显示
     private void getList(){
         RequestParams params = new RequestParams();
         params.put("TypeId","b0d53699-dde9-e611-80e3-850a1737545e");
@@ -104,6 +106,7 @@ public class ChainTypeActivity extends AppCompatActivity {
         });
     }
 
+    //设置监听
     private void setListener(){
            ls.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                @Override

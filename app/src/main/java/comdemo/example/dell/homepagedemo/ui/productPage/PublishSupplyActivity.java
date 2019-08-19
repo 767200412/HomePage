@@ -54,6 +54,7 @@ public class PublishSupplyActivity extends AppCompatActivity {
     private Boolean isCkeck[] = new Boolean[4];//保存4个标签是否被选中
     private EditText tv_message;//文本框 输入发布的信息
     private TextView text_number;//显示文本框输入了多少数字
+    private TextView photo_number;//显示添加了多少图片
     private TextView classification;//产品分类
     private TextView show2,show1;//返回的结果显示
     private TextView customized;//定制
@@ -102,6 +103,7 @@ public class PublishSupplyActivity extends AppCompatActivity {
         tv_publish = (TextView)findViewById(R.id.tv_publish);
         requestCenter = new RequestCenter(this);
         supplyChainTypes = (TextView)findViewById(R.id.supplyChainTypes);
+        photo_number = (TextView)findViewById(R.id.photo_number);
     }
 
     //设置监听
@@ -304,6 +306,8 @@ public class PublishSupplyActivity extends AppCompatActivity {
                 mPicList.add(compressPath); //把图片添加到将要上传的图片数组中
                 Log.e("图片",mPicList.get(0));
                 mGridViewAddImgAdapter.notifyDataSetChanged();
+                String s = "("+mPicList.size() + "/9)";
+                photo_number.setText(s);
             }
         }
     }
