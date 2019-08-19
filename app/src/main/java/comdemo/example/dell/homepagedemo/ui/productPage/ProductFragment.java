@@ -1,6 +1,7 @@
 package comdemo.example.dell.homepagedemo.ui.productPage;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -159,7 +160,16 @@ public class ProductFragment extends Fragment {
             }
         });
 
-
+        //发布供应按钮
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Toptab.equals("供应")){
+                    Intent intent = new Intent(getActivity(),PublishSupplyActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
 
         return view;
     }
