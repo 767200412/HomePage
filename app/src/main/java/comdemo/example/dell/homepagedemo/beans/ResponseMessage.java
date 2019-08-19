@@ -1,6 +1,8 @@
 package comdemo.example.dell.homepagedemo.beans;
 
 
+import java.util.List;
+
 public class ResponseMessage {
 
 
@@ -37,6 +39,13 @@ public class ResponseMessage {
         private String  FailedCount;
         private String  CanFailedCount;
         private String LockoutEndDate;
+
+        private List<Classification> classificationList;
+
+        private String Token;
+
+        private String Icon;
+        private String Name;
 
         public void setId(String Id) {
             this.Id = Id;
@@ -278,5 +287,37 @@ public class ResponseMessage {
 
     public void setLockoutEndDate(String lockoutEndDate) {
         LockoutEndDate = lockoutEndDate;
+    }
+
+    public List<Classification> getClassificationList() {
+        return classificationList;
+    }
+
+    public void setClassificationList(List<Classification> classificationList) {
+        this.classificationList = classificationList;
+    }
+
+    public String getToken() {
+        return Token;
+    }
+
+    public void setToken(String token) {
+        Token = token;
+    }
+
+    public String getIcon() {
+        return Icon;
+    }
+
+    public void setIcon(String icon) {
+        Icon = icon;
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
     }
 }

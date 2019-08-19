@@ -4,6 +4,7 @@ package comdemo.example.dell.homepagedemo.ui.mainPage;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
@@ -75,6 +76,8 @@ public class HomeFragment extends Fragment {
     private TextView tv_name;//品牌的名字
     private TextView tv_news;//新闻
     private ImageView imageView;//品牌的图标
+    private TextView tv_shose;//鞋子页面
+    private TextView tv_clothes;//服装页面
     private SwipeRefreshLayout swipeRefreshLayout;
     private android.support.design.widget.TabLayout mytab;
     private android.support.v7.widget.RecyclerView mRecyclerView;
@@ -109,6 +112,7 @@ public class HomeFragment extends Fragment {
     private boolean visible = false;//是否可见
     private TextView fab_company,fab_microshop;
     private ConstraintLayout fab;
+    private String menuId;//标签的标识
 
 
     @Override
@@ -132,6 +136,7 @@ public class HomeFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
                 //下拉刷新的圆圈是否显示
                 swipeRefreshLayout.setRefreshing(false);
                 //取消下拉刷新
@@ -210,7 +215,6 @@ public class HomeFragment extends Fragment {
                 adapter.setLoadState(adapter.LOADING);
                 //加载新数据
                 new LoadDataThread().start();
-                adapter.setLoadState(adapter.LOADING_COMPLETE);
             }
 
             @Override
@@ -237,11 +241,40 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        //回到安顶部
+        //回到顶部
         fab_company.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mRecyclerView.smoothScrollToPosition(0);
+            }
+        });
+
+        //切换到鞋子数据
+        tv_shose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //切换标签
+                menuId = "Fc6HomeCompanyFilter_ea4b3b12e7ece61180e3850a1737545e";
+                initTab();
+                //修改鞋子textview的显示
+                tv_shose.setTextColor(Color.parseColor("#ffff8f43"));
+                tv_shose.setTextSize(24);
+                tv_clothes.setTextSize(18);
+                tv_clothes.setTextColor(Color.parseColor("#ff888888"));
+            }
+        });
+
+        //切换的服装页面
+        tv_clothes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //切换标签
+                menuId = "Fc6HomeCompanyFilter_f91c2676e6ece61180e3850a1737545e";
+                initTab();
+                tv_clothes.setTextColor(Color.parseColor("#ffff8f43"));
+                tv_clothes.setTextSize(24);
+                tv_shose.setTextSize(18);
+                tv_shose.setTextColor(Color.parseColor("#ff888888"));
             }
         });
 
@@ -264,7 +297,11 @@ public class HomeFragment extends Fragment {
         fab_company = (TextView)view.findViewById(R.id.fab_company);
         fab_microshop = (TextView)view.findViewById(R.id.fab_microshop);
         fab = (ConstraintLayout)view.findViewById(R.id.constraintLayout_fab);
+        tv_shose = (TextView)view.findViewById(R.id.tv_shoes);
+        tv_clothes = (TextView)view.findViewById(R.id.tv_clothes);
         fab.setVisibility(View.GONE);
+        //初始是服装页面
+        menuId = "Fc6HomeCompanyFilter_f91c2676e6ece61180e3850a1737545e";
     }
 
     //判断是否登录 决定下方浮层的显、隐
@@ -380,12 +417,14 @@ public class HomeFragment extends Fragment {
 
     //初始化下方的标签
     public void initTab(){
+        //去除所有的标签
+        mytab.removeAllTabs();
         String url2 = "query MenusQuery($menuId: ID!) {  menuItems(menuId: $menuId) {    __typename    items {      __typename      id      title      actionCode      description      actionArgsJson      imgs: extProperties(type: \"img\") {        __typename        items {          __typename          key          value        }      }    }  }}";
         JSONObject variables = new JSONObject();
         JSONObject params_banner = new JSONObject();
         try {
             params_banner.put("query",url2);
-            variables.put("menuId","Fc6HomeCompanyFilter_f91c2676e6ece61180e3850a1737545e");
+            variables.put("menuId",menuId);
             params_banner.put("variables",variables);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -470,18 +509,14 @@ public class HomeFragment extends Fragment {
 
     //显示公司列表
     public void initRecyclerView(){
-//        // 定义一个线性布局管理器
-//        LinearLayoutManager manager = new LinearLayoutManager(getContext());
-//        // 设置布局管理器
-//        mRecyclerView.setLayoutManager(manager);
         // 设置adapter
         if(skip ==0) {
             adapter = new RecycleviewAdapter(getContext(), items4);
+            mRecyclerView.setAdapter(adapter);
         }
         else {
             adapter.appendData(items4);
         }
-        mRecyclerView.setAdapter(adapter);
     }
 
     //下拉加载数据

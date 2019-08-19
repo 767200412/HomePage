@@ -3,6 +3,9 @@
     package="comdemo.example.dell.homepagedemo">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -30,7 +33,12 @@
         <activity android:name=".ui.loginPage.NewPassword" />
         <activity android:name=".ui.loginPage.ForgetVeriyActivity" />
         <activity android:name=".ui.loginPage.LoginVerifyActivity" />
-        <activity android:name=".ui.mainPage.NewsActivity"></activity>
+        <activity android:name=".ui.mainPage.NewsActivity" />
+        <activity android:name=".ui.utils.ShowImageActivity" />
+        <activity android:name=".ui.productPage.PublishSupplyActivity" />
+        <activity android:name=".ui.utils.PlusImageActivity" />
+        <activity android:name=".ui.productPage.ShowClassificationActivity" />
+        <activity android:name=".ui.productPage.ChainTypeActivity"></activity>
     </application>
 
 </manifest>

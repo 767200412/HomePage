@@ -1,12 +1,20 @@
 package comdemo.example.dell.homepagedemo.adapter;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -15,6 +23,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import comdemo.example.dell.homepagedemo.R;
@@ -22,11 +31,14 @@ import comdemo.example.dell.homepagedemo.beans.Company;
 import comdemo.example.dell.homepagedemo.beans.Images;
 import comdemo.example.dell.homepagedemo.beans.Product;
 import comdemo.example.dell.homepagedemo.beans.Types;
+import comdemo.example.dell.homepagedemo.ui.dialog.BuyDialog;
+import comdemo.example.dell.homepagedemo.ui.utils.ShowImageActivity;
 
-public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 
     private Context mContext;
     private List<Product> mItemList;
+    private BuyDialog buyDialog;
 
     // 普通布局
     private final int TYPE_ITEM = 1;
@@ -82,10 +94,10 @@ public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof RecycleviewViewHolder) {
-            RecycleviewViewHolder recycleviewViewHolder = (RecycleviewViewHolder)holder;
-            Product product = mItemList.get(position);
+            final RecycleviewViewHolder recycleviewViewHolder = (RecycleviewViewHolder)holder;
+            final Product product = mItemList.get(position);
             Company company = product.getCompany();
             RequestOptions requestOptions = new RequestOptions()
                     .circleCrop()
@@ -98,7 +110,7 @@ public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             //求购人的名字
             recycleviewViewHolder.tv_name.setText(company.getName());
             //右上角的发布时间
-            recycleviewViewHolder.tv_time.setText(product.getPublishTime().substring(0,9));
+            recycleviewViewHolder.tv_time.setText(product.getPublishTime().substring(0,10));
             //求购描述
             String content =null;
             content = product.getDescription();
@@ -131,28 +143,77 @@ public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             //图片展示
             List<Images> images = product.getImages();
-
-                for(Images image:images){
-                    recycleviewViewHolder.Lsview = LayoutInflater.from(mContext).inflate(R.layout.image_show, null);
-                    recycleviewViewHolder.image_show = ((RecycleviewViewHolder) holder).Lsview.findViewById(R.id.image_show);
-                    if(images != null){
-                    String url = image.getImgUri();
+            int c = 0;
+            for(final Images image:images){
+                recycleviewViewHolder.Lsview = LayoutInflater.from(mContext).inflate(R.layout.image_show, null);
+                recycleviewViewHolder.image_show = ((RecycleviewViewHolder) holder).Lsview.findViewById(R.id.image_show);
+                if(image != null&& !image.getImgUri().equals(null)){
+                    recycleviewViewHolder.urls.add(image.getImgUri());
+                    final String url = image.getImgUri();
                     Glide.with(mContext)
                             .load(url)
                             .apply(new RequestOptions().error(recycleviewViewHolder.error))
                             .into(((RecycleviewViewHolder) holder).image_show);
-                        recycleviewViewHolder.linearLayout.addView(recycleviewViewHolder.Lsview);
+                    recycleviewViewHolder.linearLayout.addView(recycleviewViewHolder.Lsview);
+
+                    //设置图片的点击放大效果
+                    recycleviewViewHolder.image_show.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(v.getContext(), ShowImageActivity.class);
+                            intent.putStringArrayListExtra("url", recycleviewViewHolder.urls);
+                            intent.putExtra("position",url);
+                            v.getContext().startActivity(
+                                    intent,
+                                    // 注意这里的sharedView
+                                    // Content，View（动画作用view），String（和XML一样）
+                                    ActivityOptions.makeSceneTransitionAnimation((Activity) v.getContext(), v, "sharedView").toBundle());
+                            }
+                    });
                 }
             }
-
 
             //需要的数量
             String number = "数量:"+product.getQtyUnit();
             recycleviewViewHolder.qtyUnit.setText(number);
             //交货时间
-            String dtime = "交货时间:"+ product.getDeliveryTime().substring(0,9);
+            String dtime = "交货时间:"+ product.getDeliveryTime().substring(0,10);
             recycleviewViewHolder.deliveryTime.setText(dtime);
 
+            //设置按钮监听器
+            recycleviewViewHolder.chatNow.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.e("chatNow","11111111111111111111111111");
+
+                    buyDialog = new BuyDialog(mContext,R.style.MyDialog2);
+                    buyDialog.setData(product);
+                    buyDialog.setFinishOnclickListener(new BuyDialog.onFinishOnclickListener() {
+                        @Override
+                        public void onFinishClick() {
+                            buyDialog.dismiss();
+                        }
+                    });
+                    buyDialog.setGetOnclickListener(new BuyDialog.onGetOnclickListener() {
+                        @Override
+                        public void onGetClick() {
+                            //处理马上接单点击事件
+                        }
+                    });
+                    Window window = buyDialog.getWindow();
+                    // 把 DecorView 的默认 padding 取消，同时 DecorView 的默认大小也会取消
+                    window.getDecorView().setPadding(0, 0, 0, 0);
+                    WindowManager.LayoutParams layoutParams = window.getAttributes();
+                    // 设置宽度
+                    layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+                    window.setAttributes(layoutParams);
+                    // 给 DecorView 设置背景颜色，很重要，不然导致 Dialog 内容显示不全，有一部分内容会充当 padding，上面例子有举出
+                    window.getDecorView().setBackgroundColor(Color.parseColor("#00ffffff"));
+                    //设置置底
+                    window.setGravity(Gravity.BOTTOM);
+                    buyDialog.show();
+                }
+            });
 
         }
         else if (holder instanceof FootViewHolder) {
@@ -202,10 +263,13 @@ public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         private TextView posts;//现货
         private TextView promotion;//促销
         private TextView sample;//样品
+        private TextView chatNow;
         private LinearLayout linearLayout;
         private View Lsview;
         private ImageView image_show;
         private Drawable error;
+        private ImageView show_big;
+        private ArrayList<String> urls = new ArrayList<String>();
 
 
 
@@ -216,7 +280,6 @@ public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             tv_title = (TextView)itemView.findViewById(R.id.tv_title);
            tv_name = (TextView)itemView.findViewById(R.id.tv_name);
            image_icon = (ImageView)itemView.findViewById(R.id.image_icon);
-           tv_type = (TextView)itemView.findViewById(R.id.tv_type);
            tv_time = (TextView)itemView.findViewById(R.id.tv_time);
            collection = (TextView)itemView.findViewById(R.id.collection);
            image_collection = (ImageView)itemView.findViewById(R.id.image_collection);
@@ -229,6 +292,7 @@ public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
            deliveryTime = (TextView)itemView.findViewById(R.id.deliveryTime);
            Lsview = LayoutInflater.from(mContext).inflate(R.layout.image_show, null);
            image_show = Lsview.findViewById(R.id.image_show);
+           chatNow = (TextView)itemView.findViewById(R.id.chatNow);
 
         }
     }
@@ -256,4 +320,38 @@ public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.loadState = loadState;
         notifyDataSetChanged();
     }
+
+    //显示详细信息
+    private void detail(Product product){
+        buyDialog = new BuyDialog(mContext,R.style.MyDialog2);
+        buyDialog.setData(product);
+        buyDialog.setFinishOnclickListener(new BuyDialog.onFinishOnclickListener() {
+            @Override
+            public void onFinishClick() {
+                buyDialog.dismiss();
+            }
+        });
+        buyDialog.setGetOnclickListener(new BuyDialog.onGetOnclickListener() {
+            @Override
+            public void onGetClick() {
+                //处理马上接单点击事件
+            }
+        });
+        Window window = buyDialog.getWindow();
+        // 把 DecorView 的默认 padding 取消，同时 DecorView 的默认大小也会取消
+        window.getDecorView().setPadding(0, 0, 0, 0);
+        WindowManager.LayoutParams layoutParams = window.getAttributes();
+        // 设置宽度
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(layoutParams);
+        // 给 DecorView 设置背景颜色，很重要，不然导致 Dialog 内容显示不全，有一部分内容会充当 padding，上面例子有举出
+        window.getDecorView().setBackgroundColor(Color.WHITE);
+        //设置置底
+        window.setGravity(Gravity.BOTTOM);
+        buyDialog.show();
+    }
+
+
+
+
 }

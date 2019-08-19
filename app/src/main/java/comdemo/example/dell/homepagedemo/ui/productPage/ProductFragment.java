@@ -1,6 +1,7 @@
 package comdemo.example.dell.homepagedemo.ui.productPage;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,7 @@ import comdemo.example.dell.homepagedemo.listener.EndlessRecyclerOnScrollListene
 import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
 import comdemo.example.dell.homepagedemo.okhttp.request.RequestParams;
 import comdemo.example.dell.homepagedemo.request.RequestCenter;
+import comdemo.example.dell.homepagedemo.ui.dialog.BuyDialog;
 import okhttp3.Response;
 
 /**
@@ -58,6 +60,7 @@ public class ProductFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private String Toptab;//标签的名字
     private TextView fab;
+    private BuyDialog buyDialog;
     private String buy_new = "";
     private String publish_supply = "";
 
@@ -121,7 +124,7 @@ public class ProductFragment extends Fragment {
                 adapter.setLoadState(adapter.LOADING);
                 //加载新数据
                 new LoadDataThread().start();
-                adapter.setLoadState(adapter.LOADING_COMPLETE);
+
             }
         });
 
@@ -134,11 +137,13 @@ public class ProductFragment extends Fragment {
                      case "求购":
                          //设置悬浮按钮
                          fab.setBackgroundResource(R.mipmap.ic_buy_new);
+                         Skip = "0";
                          initBuy();
                          break;
                      case "供应":
                          //设置悬浮按钮
                          fab.setBackgroundResource(R.mipmap.ic_publish_supply);
+                         Skip = "0";
                          initData();
                          break;
                  }
@@ -152,6 +157,17 @@ public class ProductFragment extends Fragment {
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
 
+            }
+        });
+
+        //发布供应按钮
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(Toptab.equals("供应")){
+                    Intent intent = new Intent(getActivity(),PublishSupplyActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -172,6 +188,7 @@ public class ProductFragment extends Fragment {
         fab = (TextView)view.findViewById(R.id.fab);
         //默认显示供应页面
         fab.setBackgroundResource(R.mipmap.ic_publish_supply);
+        Toptab = "供应";
     }
     //设置顶部标签
     private void initTab(){
@@ -228,7 +245,9 @@ public class ProductFragment extends Fragment {
                 }
                 Gson gson = new Gson();
                 productList = gson.fromJson(re,new TypeToken<List<Product>>() {}.getType());
-                showBuyMessage();
+                if(productList!=null) {
+                    showBuyMessage();
+                }
             }
 
             @Override
@@ -243,11 +262,11 @@ public class ProductFragment extends Fragment {
 // 设置adapter
         if(Skip.equals("0")) {
             adapter = new ProductAdapter(getContext(), productList);
+            recyclerView.setAdapter(adapter);
         }
         else {
             adapter.appendData(productList);
         }
-        recyclerView.setAdapter(adapter);
     }
 
     //显示求购列表数据
@@ -255,11 +274,12 @@ public class ProductFragment extends Fragment {
 // 设置adapter
         if(Skip.equals("0")) {
             adapter2 = new Product_buyAdapter(getContext(), productList);
+            recyclerView.setAdapter(adapter2);
+
         }
         else {
             adapter2.appendData(productList);
         }
-        recyclerView.setAdapter(adapter2);
     }
 
     //下拉加载数据
@@ -279,5 +299,25 @@ public class ProductFragment extends Fragment {
             }
         }
     }
+
+    //显示详细信息
+    private void detail(Product product){
+        buyDialog = new BuyDialog(getContext(),R.style.MyDialog2);
+        buyDialog.setData(product);
+        buyDialog.setFinishOnclickListener(new BuyDialog.onFinishOnclickListener() {
+            @Override
+            public void onFinishClick() {
+                buyDialog.dismiss();
+            }
+        });
+        buyDialog.setGetOnclickListener(new BuyDialog.onGetOnclickListener() {
+            @Override
+            public void onGetClick() {
+                //处理马上接单点击事件
+            }
+        });
+    }
+
+
 
 }

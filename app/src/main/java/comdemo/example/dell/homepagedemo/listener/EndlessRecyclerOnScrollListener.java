@@ -11,32 +11,6 @@ public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScr
     @Override
     public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
         super.onScrollStateChanged(recyclerView, newState);
-//        LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
-//        // 当不滑动时
-//        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-////            boolean isToBottom = isSlideToBottom(recyclerView);
-////            Log.d("isToBottom", String.valueOf(isToBottom));
-//
-//            //获取最后一个完全显示的itemPosition
-//            int lastItemPosition = manager.findLastCompletelyVisibleItemPosition();
-//            int itemCount = manager.getItemCount();
-//            Log.d("lastItemPosition", String.valueOf(lastItemPosition));
-//            Log.d("itemCount", String.valueOf(itemCount));
-//
-//            // 判断是否滑动到了最后一个item，并且是向上滑动
-//            if (lastItemPosition == (itemCount - 1) && isSlidingUpward) {
-//                Log.d("","LoadMore");
-//                //加载更多
-//                onLoadMore();
-//            }
-////            // 判断是否滑动到了最后一个item，并且是向上滑动
-////            if(isToBottom ){
-////                onLoadMore();
-////            }
-//        }
-
-
-
         if(!recyclerView.canScrollVertically(1)){
             onLoadMore();
         }
