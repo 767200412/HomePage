@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -14,18 +15,33 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.luck.picture.lib.PictureSelector;
 import com.luck.picture.lib.config.PictureConfig;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UploadManager;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import comdemo.example.dell.homepagedemo.R;
 import comdemo.example.dell.homepagedemo.adapter.PhotoGridViewAdapter;
+import comdemo.example.dell.homepagedemo.beans.ResponseMessage;
 import comdemo.example.dell.homepagedemo.constant.NumberConstant;
+import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
+import comdemo.example.dell.homepagedemo.request.RequestCenter;
 import comdemo.example.dell.homepagedemo.ui.utils.PictureSelectorConfig;
 import comdemo.example.dell.homepagedemo.ui.utils.PlusImageActivity;
+import okhttp3.Response;
 
 public class PublishSupplyActivity extends AppCompatActivity {
 
@@ -33,14 +49,27 @@ public class PublishSupplyActivity extends AppCompatActivity {
     private Context mContext;
     private GridView gridView;
     private ArrayList<String> mPicList = new ArrayList<>(); //上传的图片凭证的数据源
+    private ArrayList<String> mName = new ArrayList<>(); //上传的图片凭证的数据源
     private PhotoGridViewAdapter mGridViewAddImgAdapter; //展示上传的图片的适配器
     private Boolean isCkeck[] = new Boolean[4];//保存4个标签是否被选中
     private EditText tv_message;//文本框 输入发布的信息
     private TextView text_number;//显示文本框输入了多少数字
+    private TextView classification;//产品分类
+    private TextView show2,show1;//返回的结果显示
     private TextView customized;//定制
     private TextView posts;//现货
     private TextView promotion;//促销
     private TextView sample;//样品
+    private TextView supplyChainTypes;//供应链类型
+    private String selectClass,selectChain,selectClassCont;
+    private String CategoryId1,CategoryId2;
+    private TextView tv_publish;//立即发布
+    private RequestCenter requestCenter;
+    private Gson gson = new Gson();
+    private String token;
+    private UploadManager uploadManager = new UploadManager();
+    private List<ResponseMessage> resMe;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +78,7 @@ public class PublishSupplyActivity extends AppCompatActivity {
         init();
         initGridView();
         setListenter();
+        setTab();
     }
 
     //初始化
@@ -66,6 +96,12 @@ public class PublishSupplyActivity extends AppCompatActivity {
 
         text_number = (TextView)findViewById(R.id.text_number);
         tv_message = (EditText)findViewById(R.id.tv_message);
+        classification = (TextView)findViewById(R.id.classification);
+        show1 = (TextView)findViewById(R.id.show1);
+        show2 = (TextView)findViewById(R.id.show2);
+        tv_publish = (TextView)findViewById(R.id.tv_publish);
+        requestCenter = new RequestCenter(this);
+        supplyChainTypes = (TextView)findViewById(R.id.supplyChainTypes);
     }
 
     //设置监听
@@ -184,6 +220,38 @@ public class PublishSupplyActivity extends AppCompatActivity {
             }
         });
 
+
+        //产品分类
+        classification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PublishSupplyActivity.this,ShowClassificationActivity.class);
+                intent.putExtra("selectClass",selectClass);
+                intent.putExtra("selectClassCont",selectClassCont);
+                startActivityForResult(intent,0x002);
+            }
+        });
+
+
+        //供应链类别
+        supplyChainTypes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PublishSupplyActivity.this,ChainTypeActivity.class);
+                intent.putExtra("selectClass",selectClass);
+                intent.putExtra("CategoryId2",CategoryId2);
+                startActivityForResult(intent,0x003);
+            }
+        });
+
+        //立即发布
+        tv_publish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //获取上传凭证
+                getToken();
+            }
+        });
     }
 
     //初始化图片上传项目
@@ -234,9 +302,133 @@ public class PublishSupplyActivity extends AppCompatActivity {
             if (localMedia.isCompressed()) {
                 String compressPath = localMedia.getCompressPath(); //压缩后的图片路径
                 mPicList.add(compressPath); //把图片添加到将要上传的图片数组中
+                Log.e("图片",mPicList.get(0));
                 mGridViewAddImgAdapter.notifyDataSetChanged();
             }
         }
+    }
+
+    //获取上传凭证
+    private void getToken(){
+        requestCenter.GetToken(new DisposeDataListener() {
+            @Override
+            public void onSuccess(Response responseObj) {
+                String result = null;
+                try {
+                    result = responseObj.body().string();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                ResponseMessage responseMessage =gson.fromJson(result,ResponseMessage.class);
+                token = responseMessage.getToken();
+                Log.e("token",token);
+                //上传图片
+                sendPicture();
+            }
+
+            @Override
+            public void onFailure(Object responseObj) {
+
+            }
+        });
+
+    }
+
+    private void sendPicture(){
+        for(int i = 0 ; i < mPicList.size();i++) {
+            File data = new File(mPicList.get(0));
+            String key = data.getName();
+            String name  = "http://filesdev.fccn.cc/"+key;
+            mName.add(name);
+            uploadManager.put(data, key, token, new UpCompletionHandler() {
+                @Override
+                public void complete(String key, ResponseInfo info, JSONObject response) {
+                    //res包含hash、key等信息，具体字段取决于上传策略的设置
+                    if(info.isOK()) {
+                        Log.i("qiniu", "Upload Success");
+                    } else {
+                        Log.i("qiniu", "Upload Fail");
+                        //如果失败，这里可以把info信息上报自己的服务器，便于后面分析上传错误原因
+                    }
+                    Log.i("qiniu", key + ",\r\n " + info + ",\r\n " + response);
+                }
+            }, null);
+        }
+
+        //上传供应信息
+        sendMarketTalks();
+    }
+
+    //设置标签
+    private void setTab(){
+          requestCenter.GetTags(new DisposeDataListener() {
+              @Override
+              public void onSuccess(Response responseObj) {
+                  String result = null;
+                  try {
+                      result = responseObj.body().string();
+                  } catch (IOException e) {
+                      e.printStackTrace();
+                  }
+                  resMe = gson.fromJson(result,new TypeToken<List<ResponseMessage>>(){}.getType());
+                  customized.setText(resMe.get(0).getName());
+                  posts.setText(resMe.get(1).getName());
+                  promotion.setText(resMe.get(2).getName());
+                  sample.setText(resMe.get(3).getName());
+
+              }
+
+              @Override
+              public void onFailure(Object responseObj) {
+
+              }
+          });
+    }
+    //上传供应信息
+    private void sendMarketTalks() {
+        String SenderId = "a6b6ba45-5b1f-e711-80e3-850a1737545e";
+        String CompanyId = "a2b6ba45-5b1f-e711-80e3-850a1737545e";
+        String Content = tv_message.getText().toString();
+        JSONObject param = new JSONObject();
+        JSONArray CategoryIds = new JSONArray();
+        CategoryIds.put(CategoryId1);
+        CategoryIds.put(CategoryId2);
+        JSONArray Images = new JSONArray();
+        JSONObject Image = new JSONObject();
+        JSONArray TagIds = new JSONArray();
+        int a = 0;
+        for(int i = 0 ; i<4;i++){
+            if(isCkeck[i]){
+                TagIds.put(resMe.get(i).getId());
+                a++;
+            }
+        }
+        try {
+            for(int i =0;i<mName.size();i++){
+                Image.put("OriginalPath",mName.get(i).toString());
+                Images.put(Image);
+            }
+            param.put("SenderId",SenderId);
+            param.put("CategoryIds",CategoryIds);
+            param.put("Content",Content);
+            param.put("Images",Images);
+            param.put("TagIds",TagIds);
+            param.put("CompanyId",CompanyId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        requestCenter.SendMarketTalks(param, new DisposeDataListener() {
+            @Override
+            public void onSuccess(Response responseObj) {
+                   finish();
+            }
+
+            @Override
+            public void onFailure(Object responseObj) {
+
+            }
+        });
     }
 
     @Override
@@ -261,6 +453,18 @@ public class PublishSupplyActivity extends AppCompatActivity {
             mPicList.clear();
             mPicList.addAll(toDeletePicList);
             mGridViewAddImgAdapter.notifyDataSetChanged();
+        }
+        if(requestCode==0x002&&resultCode==0x001){
+            selectClass=data.getStringExtra("selectClass");
+            CategoryId1 = data.getStringExtra("CategoryId");
+            selectClassCont = data.getStringExtra("selectClassCont");
+            show1.setText(selectClassCont);
+        }
+        if(requestCode==0x003&&resultCode==0x002){
+            selectClass=data.getStringExtra("selectClass");
+            CategoryId2 = data.getStringExtra("CategoryId2");
+
+            show2.setText(selectClass);
         }
     }
 }

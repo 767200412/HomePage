@@ -37,6 +37,17 @@ public class HttpConstant {
 
     //获取供应购信息
     public static String GetMarketTalks = URL +"MarketTalks";
+
+    //获取标签信息
+    public static String GetTags = URL +"MarketTalks/Tags";
+
+    //产品分类信息
+    public static String GetCompanyCategories = URL + "CompanyCategories";
     //求购列表
     public static String GetBiddings = URL2 + "Biddings";
+
+
+
+    //获取七牛上传凭证
+    public static String GetToken = URL2 + "Qiniu/GetUploadToken";
 }

@@ -177,14 +177,41 @@ public class RequestCenter {
         RequestCenter.getRequest(HttpConstant.GetPlatformArticles,params,listener,null);
     }
 
+    /*
+    * 产品
+    */
+
     //获取供应信息列表
     public static void GetMarketTalks(RequestParams params,DisposeDataListener listener){
         RequestCenter.getRequest(HttpConstant.GetMarketTalks,params,listener,null);
+    }
+    //获取产品分类信息
+    public static void GetCompanyCategories(RequestParams params,DisposeDataListener listener){
+        RequestCenter.getRequest(HttpConstant.GetCompanyCategories,params,listener,null);
     }
 
     //获取求购信息列表
     public static  void GetBiddings(RequestParams params,DisposeDataListener listener){
         RequestCenter.getRequest(HttpConstant.GetBiddings,params,listener,null);
+    }
+
+    //获取 七牛上传凭证
+    public static void GetToken(DisposeDataListener listener){
+        RequestCenter.getRequest(HttpConstant.GetToken,null,listener,null);
+    }
+
+    //获取类别标签
+    public static void GetTags(DisposeDataListener listener){
+        RequestCenter.getRequest(HttpConstant.GetTags,null,listener,null);
+    }
+//    //获取供应链
+//    public static void GetChain(RequestParams params,DisposeDataListener listener){
+//        RequestCenter.getRequest(HttpConstant.,params,listener,null);
+//    }
+
+    //发布供应信息
+    public static void SendMarketTalks(JSONObject params,DisposeDataListener listener){
+        RequestCenter.postRequest(HttpConstant.GetMarketTalks,params,listener,null);
     }
 
 }
