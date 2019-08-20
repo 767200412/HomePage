@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import comdemo.example.dell.homepagedemo.R;
+import comdemo.example.dell.homepagedemo.adapter.ClickInterface;
 import comdemo.example.dell.homepagedemo.adapter.PhotoGridViewAdapter;
 import comdemo.example.dell.homepagedemo.beans.ResponseMessage;
 import comdemo.example.dell.homepagedemo.constant.NumberConstant;
@@ -43,7 +45,7 @@ import comdemo.example.dell.homepagedemo.ui.utils.PictureSelectorConfig;
 import comdemo.example.dell.homepagedemo.ui.utils.PlusImageActivity;
 import okhttp3.Response;
 
-public class PublishSupplyActivity extends AppCompatActivity {
+public class PublishSupplyActivity extends AppCompatActivity implements ClickInterface{
 
     private ImageView back;
     private Context mContext;
@@ -104,6 +106,8 @@ public class PublishSupplyActivity extends AppCompatActivity {
         requestCenter = new RequestCenter(this);
         supplyChainTypes = (TextView)findViewById(R.id.supplyChainTypes);
         photo_number = (TextView)findViewById(R.id.photo_number);
+
+        PhotoGridViewAdapter.CallBackData.setClickInterface(this);
     }
 
     //设置监听
@@ -250,13 +254,13 @@ public class PublishSupplyActivity extends AppCompatActivity {
         tv_publish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //获取上传凭证
-                getToken();
+                //判断是否有未填项目
+                isAllOk();
             }
         });
     }
 
-    //初始化图片上传项目
+    //初始化图片上传项目GridView
     private void initGridView(){
         mGridViewAddImgAdapter = new PhotoGridViewAdapter(mContext, mPicList);
         gridView.setAdapter(mGridViewAddImgAdapter);
@@ -304,11 +308,37 @@ public class PublishSupplyActivity extends AppCompatActivity {
             if (localMedia.isCompressed()) {
                 String compressPath = localMedia.getCompressPath(); //压缩后的图片路径
                 mPicList.add(compressPath); //把图片添加到将要上传的图片数组中
-                Log.e("图片",mPicList.get(0));
+                //Log.e("图片",mPicList.get(0));
                 mGridViewAddImgAdapter.notifyDataSetChanged();
                 String s = "("+mPicList.size() + "/9)";
                 photo_number.setText(s);
             }
+        }
+    }
+
+    private void isAllOk(){
+        int Content = tv_message.getText().toString().length();//内容
+        boolean flag = false;
+        for(int i = 0 ; i < isCkeck.length ;i++){
+            if(isCkeck[i] == true){
+                flag = true;
+            }
+        }
+        if(Content != 0 && CategoryId1 !=null && CategoryId2 != null && flag){
+            //获取上传凭证
+            getToken();
+        }
+        else if(Content == 0){
+            Toast.makeText(PublishSupplyActivity.this,"请输入产品信息",Toast.LENGTH_SHORT).show();
+        }
+        else if(CategoryId1 == null){
+            Toast.makeText(PublishSupplyActivity.this,"请选择产品类型",Toast.LENGTH_SHORT).show();
+        }
+        else if(CategoryId2 == null){
+            Toast.makeText(PublishSupplyActivity.this,"请选择供应链类型",Toast.LENGTH_SHORT).show();
+        }
+        else if(!flag){
+            Toast.makeText(PublishSupplyActivity.this,"请选择供应类型",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -338,6 +368,7 @@ public class PublishSupplyActivity extends AppCompatActivity {
 
     }
 
+    //上传图片
     private void sendPicture(){
         for(int i = 0 ; i < mPicList.size();i++) {
             File data = new File(mPicList.get(0));
@@ -457,6 +488,8 @@ public class PublishSupplyActivity extends AppCompatActivity {
             mPicList.clear();
             mPicList.addAll(toDeletePicList);
             mGridViewAddImgAdapter.notifyDataSetChanged();
+            String s = "("+mPicList.size() + "/9)";
+            photo_number.setText(s);
         }
         if(requestCode==0x002&&resultCode==0x001){
             selectClass=data.getStringExtra("selectClass");
@@ -470,5 +503,18 @@ public class PublishSupplyActivity extends AppCompatActivity {
 
             show2.setText(selectClass);
         }
+    }
+
+
+    /**
+     * 实现接口，获取数据
+     * */
+    @Override
+    public void OnListener(int position) {
+        //删除图片
+        mPicList.remove(position);
+        mGridViewAddImgAdapter.notifyDataSetChanged();
+        String s = "("+mPicList.size() + "/9)";
+        photo_number.setText(s);
     }
 }

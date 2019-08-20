@@ -87,9 +87,13 @@ public class ShowClassificationActivity extends AppCompatActivity {
         verticalTabLayout.addOnTabSelectedListener(new VerticalTabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabView tab, int position) {
+                for(int i = 0 ;i < verticalTabLayout.getTabCount();i++){
+                    verticalTabLayout.getTabAt(i).setBackgroundResource(R.color.background);
+                }
                 selectClass = tab.getTitleView().getText().toString();
                 subList = classList.get(position).getSubCategories();
                 setContainter();
+                tab.setBackgroundResource(R.color.colorWhite);
             }
 
             @Override
@@ -159,7 +163,8 @@ public class ShowClassificationActivity extends AppCompatActivity {
 
              @Override
              public int getBackground(int position) {
-                 return 0;
+
+                 return R.color.background;
              }
          });
 
@@ -168,6 +173,7 @@ public class ShowClassificationActivity extends AppCompatActivity {
          for(int i = 0 ; i<classList.size();i++){
              if(classList.get(i).getName().equals(selectClass)){
                  verticalTabLayout.setTabSelected(i);
+                 verticalTabLayout.getTabAt(i).setBackgroundResource(R.color.colorWhite);
              }
          }
 
