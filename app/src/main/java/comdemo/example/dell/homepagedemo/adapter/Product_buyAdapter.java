@@ -97,7 +97,7 @@ public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof RecycleviewViewHolder) {
             final RecycleviewViewHolder recycleviewViewHolder = (RecycleviewViewHolder)holder;
-            final Product product = mItemList.get(position);
+            Product product = mItemList.get(position);
             Company company = product.getCompany();
             RequestOptions requestOptions = new RequestOptions()
                     .circleCrop()
@@ -143,12 +143,13 @@ public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             //图片展示
             List<Images> images = product.getImages();
-            int c = 0;
             for(final Images image:images){
+                Log.d("ProductBuyAdapter1",image.getImgUri());
                 recycleviewViewHolder.Lsview = LayoutInflater.from(mContext).inflate(R.layout.image_show, null);
                 recycleviewViewHolder.image_show = ((RecycleviewViewHolder) holder).Lsview.findViewById(R.id.image_show);
                 if(image != null&& !image.getImgUri().equals(null)){
                     recycleviewViewHolder.urls.add(image.getImgUri());
+                    Log.d("ProductBuyAdapter2",image.getImgUri());
                     final String url = image.getImgUri();
                     Glide.with(mContext)
                             .load(url)
@@ -184,10 +185,10 @@ public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             recycleviewViewHolder.chatNow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.e("chatNow","11111111111111111111111111");
 
+                    Product mProduct = mItemList.get(position);
                     buyDialog = new BuyDialog(mContext,R.style.MyDialog2);
-                    buyDialog.setData(product);
+                    buyDialog.setData(mProduct);
                     buyDialog.setFinishOnclickListener(new BuyDialog.onFinishOnclickListener() {
                         @Override
                         public void onFinishClick() {

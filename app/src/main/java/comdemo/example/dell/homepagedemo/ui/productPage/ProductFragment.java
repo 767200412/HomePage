@@ -123,7 +123,8 @@ public class ProductFragment extends Fragment {
             public void onLoadMore() {
                 adapter.setLoadState(adapter.LOADING);
                 //加载新数据
-                new LoadDataThread().start();
+                LoadDataThread();
+
 
             }
         });
@@ -283,21 +284,20 @@ public class ProductFragment extends Fragment {
     }
 
     //下拉加载数据
-    class LoadDataThread extends Thread {
-        @Override
-        public void run() {
+    private void LoadDataThread() {
+
             int skip_n = Integer.valueOf(Skip);
             skip_n += 10;
             Skip = String.valueOf(skip_n);
-            switch(Toptab){
+            switch(Toptab) {
                 case "求购":
                     initBuy();
                     break;
                 case "供应":
                     initData();
                     break;
+
             }
-        }
     }
 
     //显示详细信息

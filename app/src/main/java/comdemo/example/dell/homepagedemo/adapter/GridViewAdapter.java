@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +71,7 @@ public class GridViewAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         View v = layoutInflater.inflate(R.layout.image_show_gridview,null);
         ImageView iv = (ImageView) v.findViewById(R.id.image_show);
+        Log.d("GridViewAdapter",mItemList.get(position).getImgUri());
         Glide.with(mContext)
                 .load(mItemList.get(position).getImgUri())
                 .apply(new RequestOptions().error(error))
@@ -77,7 +79,7 @@ public class GridViewAdapter extends BaseAdapter {
         iv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //点击看大图
                 Intent intent = new Intent(mContext, ShowImageActivity.class);
                 intent.putStringArrayListExtra("url", urls);
                 intent.putExtra("position",mItemList.get(position).getImgUri());
@@ -90,8 +92,6 @@ public class GridViewAdapter extends BaseAdapter {
         });
         return v;
     }
-
-
 
     private static Activity scanForActivity(Context cont) {
         if (cont == null)

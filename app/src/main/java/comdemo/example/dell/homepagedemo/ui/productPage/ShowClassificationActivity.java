@@ -4,11 +4,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -17,6 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 import comdemo.example.dell.homepagedemo.R;
+import comdemo.example.dell.homepagedemo.adapter.ButtonGridViewAdapter;
 import comdemo.example.dell.homepagedemo.beans.Classification;
 import comdemo.example.dell.homepagedemo.beans.ResponseMessage;
 import comdemo.example.dell.homepagedemo.beans.Subcategories;
@@ -32,7 +32,7 @@ import q.rorbin.verticaltablayout.widget.TabView;
 public class ShowClassificationActivity extends AppCompatActivity {
     private ImageView back;//返回标签
     private VerticalTabLayout verticalTabLayout;//垂直标签选项卡
-    private LinearLayout container;//进一步的内容
+    private GridView container;//进一步的内容
     private RequestCenter requestCenter;
     private String selectClass,selectClassCont;
     //请求列表参数
@@ -44,6 +44,7 @@ public class ShowClassificationActivity extends AppCompatActivity {
     private ResponseMessage responseMessage;
     private List<Classification> classList ;
     private List<Subcategories> subList;
+    private ButtonGridViewAdapter adapter;
 
 
 
@@ -65,11 +66,12 @@ public class ShowClassificationActivity extends AppCompatActivity {
     private void init(){
         back = (ImageView)findViewById(R.id.back);
         verticalTabLayout = (VerticalTabLayout) findViewById(R.id.tab);
-        container = (LinearLayout)findViewById(R.id.container);
+        container = (GridView)findViewById(R.id.container);
         requestCenter = new RequestCenter(this);
         Intent intent = getIntent();
         selectClass = intent.getStringExtra("selectClass");
         selectClassCont = intent.getStringExtra("selectClassCont");
+
     }
 
 
@@ -182,29 +184,20 @@ public class ShowClassificationActivity extends AppCompatActivity {
 
     //设置内容
     private void setContainter(){
-        container.removeAllViews();
-        for(final Subcategories sub:subList) {
-            TextView childView1 = (TextView) LayoutInflater.from(ShowClassificationActivity.this)
-                    .inflate(R.layout.tag, container, false);
-            childView1.setText(sub.getName());
-            if(sub.getName().equals(selectClassCont)){
-                childView1.setTextColor(Color.parseColor("#ffff8f43"));
-                childView1.setBackgroundResource(R.drawable.item);
-            }
-            childView1.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    selectClassCont = sub.getName();
+          adapter = new ButtonGridViewAdapter(this,subList,selectClassCont);
+          container.setAdapter(adapter);
+          container.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+              @Override
+              public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                  selectClassCont = subList.get(position).getName();
                     Intent intent=new Intent();
                     intent.putExtra("selectClass",selectClass);
                     intent.putExtra("selectClassCont",selectClassCont);
-                    intent.putExtra("CategoryId",sub.getId());
+                    intent.putExtra("CategoryId",subList.get(position).getId());
                     setResult(0x001,intent);
                     finish();
-                }
-            });
-           container.addView(childView1);
-
-        }
+              }
+          });
     }
+
 }

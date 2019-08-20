@@ -6,7 +6,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StyleRes;
-import android.util.Log;
+import android.text.SpannableString;
+import android.text.style.LeadingMarginSpan;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.GridView;
@@ -17,7 +19,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import comdemo.example.dell.homepagedemo.R;
@@ -183,18 +184,16 @@ public class BuyDialog extends Dialog {
             tv_time.setText(product.getCreatedTime().substring(0,9));
         }
         if (product.getDescription() != null) {
-            //获取发布内容
-            String content = null;
-            for(int i = 0;i<a;i++) {
-               // Log.e("a=",String.valueOf(a));
-                //延长以显示标签
+            float mPx = 36 *a;//每个tag的距离 * 显示的tag个数
 
-                String blankSpace = "\t";
-                content += blankSpace;
-            }
-            content+= product.getDescription();
-            Log.e("",content);
-            title.setText(content);
+            //1.先创建SpannableString对象
+            SpannableString spannableString = new SpannableString(product.getDescription());
+            //2.设置文本缩进的样式，参数arg0，首行缩进的像素，arg1，剩余行缩进的像素,这里我将像素px转换成了手机独立像素dp
+            LeadingMarginSpan.Standard what = new LeadingMarginSpan.Standard(dp2px(getContext(), mPx), 0);
+            //3.进行样式的设置了,其中参数what是具体样式的实现对象,start则是该样式开始的位置，end对应的是样式结束的位置，参数flags，定义在Spannable中的常量
+            spannableString.setSpan(what, 0, spannableString.length(), SpannableString.SPAN_INCLUSIVE_INCLUSIVE);
+
+            title.setText(spannableString);
         }
         if (product.getQtyUnit() != null) {
             //需要的数量
@@ -209,13 +208,13 @@ public class BuyDialog extends Dialog {
 
         //图片展示
         List<Images> images = product.getImages();
-        ArrayList<HashMap<String, Object>> lstImageItem = new ArrayList<HashMap<String, Object>>();;
-
-        for(Images image: images){
-            HashMap<String, Object> map = new HashMap<String, Object>();
-            map.put("image",image);
-            lstImageItem.add(map);
-        }
+//        ArrayList<HashMap<String, Object>> lstImageItem = new ArrayList<HashMap<String, Object>>();
+//
+//        for(Images image: images){
+//            HashMap<String, Object> map = new HashMap<String, Object>();
+//            map.put("image",image);
+//            lstImageItem.add(map);
+//        }
         adapter = new GridViewAdapter(getContext(), images);
         show_image.setAdapter(adapter);
 
@@ -245,6 +244,18 @@ public class BuyDialog extends Dialog {
         });
     }
 
+
+    /**
+     * dp转px
+     *
+     * @param context
+     * @param dpVal
+     * @return
+     */
+    public static int dp2px(Context context, float dpVal) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                dpVal, context.getResources().getDisplayMetrics());
+    }
 
     public interface onFinishOnclickListener {
         public void onFinishClick();
