@@ -1,4 +1,4 @@
-package comdemo.example.dell.homepagedemo.request;
+package comdemo.example.dell.homepagedemo.utils.okhttp.request;
 
 
 import android.content.Context;
@@ -8,11 +8,9 @@ import org.json.JSONObject;
 import comdemo.example.dell.homepagedemo.beans.ResponseMessage;
 import comdemo.example.dell.homepagedemo.beans.Topdata;
 import comdemo.example.dell.homepagedemo.constant.HttpConstant;
-import comdemo.example.dell.homepagedemo.okhttp.CommonOkHttpClient;
-import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataHandle;
-import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
-import comdemo.example.dell.homepagedemo.okhttp.request.CommonRequest;
-import comdemo.example.dell.homepagedemo.okhttp.request.RequestParams;
+import comdemo.example.dell.homepagedemo.utils.okhttp.CommonOkHttpClient;
+import comdemo.example.dell.homepagedemo.utils.okhttp.listener.DisposeDataHandle;
+import comdemo.example.dell.homepagedemo.utils.okhttp.listener.DisposeDataListener;
 
 /**
  * 描述:     统一管理所有的请求
