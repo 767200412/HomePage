@@ -14,7 +14,7 @@ import android.widget.ImageButton;
 import comdemo.example.dell.homepagedemo.R;
 import comdemo.example.dell.homepagedemo.utils.SomeMonitorEditText;
 
-public class Password extends AppCompatActivity {
+public class PasswordActivity extends AppCompatActivity {
     private ImageButton mImageBtn;
     private EditText mEditTextPassword;
     private Button mButtonLog;
@@ -56,7 +56,7 @@ public class Password extends AppCompatActivity {
             public void onClick(View v) {
                 password = mEditTextPassword.getText().toString();
                 //跳转到设置真实姓名
-                Intent intent = new Intent(Password.this,ReallyName.class);
+                Intent intent = new Intent(PasswordActivity.this,ReallyNameActivity.class);
                 intent.putExtra("phone",phoneNumber);
                 intent.putExtra("verifyCode",edit);
                 intent.putExtra("password",password);

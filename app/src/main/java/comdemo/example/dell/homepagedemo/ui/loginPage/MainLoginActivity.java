@@ -166,7 +166,7 @@ public class MainLoginActivity extends AppCompatActivity {
        mTvReg.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-               Intent intent = new Intent(MainLoginActivity.this,Register.class);
+               Intent intent = new Intent(MainLoginActivity.this,RegisterActivity.class);
                startActivity(intent);
            }
        });
@@ -175,7 +175,7 @@ public class MainLoginActivity extends AppCompatActivity {
         mTvForget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainLoginActivity.this,FindPassword.class);
+                Intent intent = new Intent(MainLoginActivity.this,FindPasswordActivity.class);
                 intent.putExtra("phone",mEditTextPhoneNumber.getText().toString());
                 startActivity(intent);
             }
@@ -185,7 +185,7 @@ public class MainLoginActivity extends AppCompatActivity {
         mTvLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainLoginActivity.this,VerificationLog.class);
+                Intent intent = new Intent(MainLoginActivity.this,VerificationLogActivity.class);
                 intent.putExtra("phone",mEditTextPhoneNumber.getText().toString());
                 startActivity(intent);
             }
@@ -255,7 +255,7 @@ public class MainLoginActivity extends AppCompatActivity {
             public void onYesOnclick() {
                 myDialog.dismiss();
                 //前往密码忘记页面 带入手机值
-                Intent intent = new Intent(MainLoginActivity.this,FindPassword.class);
+                Intent intent = new Intent(MainLoginActivity.this,FindPasswordActivity.class);
                 intent.putExtra("phone",mEditTextPhoneNumber.getText().toString());
                 startActivity(intent);
             }
@@ -291,7 +291,7 @@ public class MainLoginActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        requestCenter.Login(param_log, new DisposeDataListener() {
+        requestCenter.login(param_log, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 int code = responseObj.code();

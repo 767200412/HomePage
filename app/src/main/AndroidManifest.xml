@@ -24,13 +24,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.loginPage.MainLoginActivity" />
-        <activity android:name=".ui.loginPage.Register" />
+        <activity android:name=".ui.loginPage.RegisterActivity" />
         <activity android:name=".ui.loginPage.MessageVerification" />
-        <activity android:name=".ui.loginPage.Password" />
-        <activity android:name=".ui.loginPage.ReallyName" />
-        <activity android:name=".ui.loginPage.VerificationLog" />
-        <activity android:name=".ui.loginPage.FindPassword" />
-        <activity android:name=".ui.loginPage.NewPassword" />
+        <activity android:name=".ui.loginPage.PasswordActivity" />
+        <activity android:name=".ui.loginPage.ReallyNameActivity" />
+        <activity android:name=".ui.loginPage.VerificationLogActivity" />
+        <activity android:name=".ui.loginPage.FindPasswordActivity" />
+        <activity android:name=".ui.loginPage.NewPasswordActivity" />
         <activity android:name=".ui.loginPage.ForgetVeriyActivity" />
         <activity android:name=".ui.loginPage.LoginVerifyActivity" />
         <activity android:name=".ui.mainPage.NewsActivity" />

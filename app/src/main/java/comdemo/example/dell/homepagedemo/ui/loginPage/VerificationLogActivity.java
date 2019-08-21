@@ -21,37 +21,37 @@ import comdemo.example.dell.homepagedemo.utils.okhttp.listener.DisposeDataListen
 import comdemo.example.dell.homepagedemo.utils.okhttp.request.RequestCenter;
 import comdemo.example.dell.homepagedemo.utils.dialog.MyDialog2;
 import comdemo.example.dell.homepagedemo.utils.dialog.MyDialog3;
-import comdemo.example.dell.homepagedemo.ui.mainPage.MainActivity;
 import comdemo.example.dell.homepagedemo.utils.SomeMonitorEditText;
 import okhttp3.Response;
 
-public class FindPassword extends AppCompatActivity {
-
-
-
+public class VerificationLogActivity extends AppCompatActivity {
     private EditText mEditPhoneNumber;
     private Button mButtonLog;
     private ImageView mIvExit;
-    private String phone;//用户手机号
-    private RequestCenter requestCenter;
+    private String phoneNumber;//手机号
+    private String veriCode;//图形验证码
     private Bitmap bitmap;
+    private RequestCenter requestCenter;
     private MyDialog2 myDialog2;
     private MyDialog3 myDialog3;
-    private String veriCode;//用户输入的验证码
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_verification_log);
         //初始化
         init();
-
-        //点击获取验证码
         mButtonLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                phone = mEditPhoneNumber.getText().toString();
+//                //跳转到验证码界面
+//                Intent intent = new Intent(VerificationLogActivity.this,MessageVerification.class);
+//                intent.putExtra("phone",mEditTextPassword.getText().toString());
+//                intent.putExtra("type","log");
+//                startActivity(intent);
+                phoneNumber = mEditPhoneNumber.getText().toString();
                 //先判断是否有手机号存在
                 hasAccountByPhone();
-
             }
         });
 
@@ -59,7 +59,7 @@ public class FindPassword extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //退出界面
-                Intent intent = new Intent(FindPassword.this,MainActivity.class);
+                Intent intent = new Intent(VerificationLogActivity.this,MainLoginActivity.class);
                 intent.putExtra(MainLoginActivity.TAG_EXIT, true);
                 startActivity(intent);
             }
@@ -68,24 +68,15 @@ public class FindPassword extends AppCompatActivity {
 
     //初始化
     private void init(){
-        setContentView(R.layout.activity_find_password);
         mEditPhoneNumber = (EditText)findViewById(R.id.et_PhoneNumber);
         mButtonLog = (Button)findViewById(R.id.bt_log);
         mIvExit = (ImageView)findViewById(R.id.imageView4);
         requestCenter = new RequestCenter(this);
-
         Intent intent = getIntent();//声明一个对象，并获得跳转过来的Intent对象
-        phone = intent.getStringExtra("phone");//从intent对象中获得数据
-        mEditPhoneNumber.setText(phone);
-
-        if(mEditPhoneNumber.getText().toString().equals("")) {
-            //限制按钮激活
-            new SomeMonitorEditText().SetMonitorEditText(mButtonLog, mEditPhoneNumber);
-        }
-        else{
-            mButtonLog.setEnabled(true);
-            mButtonLog.setBackgroundResource(R.drawable.btn_shape_normal);
-        }
+        phoneNumber = intent.getStringExtra("phone");//从intent对象中获得数据
+        mEditPhoneNumber.setText(phoneNumber);
+        //限制按钮激活
+        new SomeMonitorEditText().SetMonitorEditText(mButtonLog, mEditPhoneNumber);
     }
 
     //账号是否存在
@@ -93,7 +84,7 @@ public class FindPassword extends AppCompatActivity {
         JSONObject param_register = new JSONObject();
         try {
             param_register.put("PhoneRegionCode","+86");
-            param_register.put("PhoneNumber",phone);
+            param_register.put("PhoneNumber",phoneNumber);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -112,7 +103,7 @@ public class FindPassword extends AppCompatActivity {
                     getVeriCode();
                 }
                 else if(hasAccount.equals("false")){
-                    //有账号 弹窗提示
+                    //没有账号 弹窗提示
                     hasNoAccountDialog();
                 }
             }
@@ -124,11 +115,11 @@ public class FindPassword extends AppCompatActivity {
         });
     }
 
-    //已经有账号的提示框
+    //没有账号的提示框
     private void hasNoAccountDialog(){
-        myDialog2=new MyDialog2(FindPassword.this,R.style.MyDialog);
+        myDialog2=new MyDialog2(VerificationLogActivity.this,R.style.MyDialog);
         //myDialog.setTitle("警告！");
-        myDialog2.setMessage("此账号还未注册辅城");
+        myDialog2.setMessage("此账号未注册辅城");
         myDialog2.setYesOnclickListener("确定", new MyDialog2.onYesOnclickListener() {
             @Override
             public void onYesOnclick() {
@@ -141,7 +132,7 @@ public class FindPassword extends AppCompatActivity {
 
     //获取图形验证码
     private void getVeriCode(){
-        requestCenter.getResetVerify(new DisposeDataListener() {
+        requestCenter.getLoginVerify(new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 byte[] b = new byte[0];
@@ -160,10 +151,9 @@ public class FindPassword extends AppCompatActivity {
             }
         });
     }
-
     //图形验证码弹窗
     private void veriCodeDialog(Bitmap bitmap){
-        myDialog3 = new MyDialog3(FindPassword.this,R.style.MyDialog);
+        myDialog3 = new MyDialog3(VerificationLogActivity.this,R.style.MyDialog);
         myDialog3.setBitmap(bitmap);
         myDialog3.setImageOnclickListener(new MyDialog3.onImageOnclickListener(){
 
@@ -209,9 +199,9 @@ public class FindPassword extends AppCompatActivity {
         myDialog3.show();
     }
 
-    //图形验证码是否正确
+    //验证码是否正确
     private void veriCodeCheck(){
-        requestCenter.ResetVerify(veriCode, new DisposeDataListener() {
+        requestCenter.loginVerify(veriCode, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 String check = null;
@@ -223,12 +213,12 @@ public class FindPassword extends AppCompatActivity {
 
                 if(check.equals("true")){
                     //图形验证码输入正确 发送短信验证码
-                    getResetPasswordVerifyCodeByPhone();
+                    GetLoginVerifyCode();
 
                 }
                 else if(check.equals("false")){
                     //验证码输入错误
-                    Toast.makeText(FindPassword.this,"验证码错误，请重新输入",Toast.LENGTH_LONG).show();
+                    Toast.makeText(VerificationLogActivity.this,"验证码错误，请重新输入",Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -239,23 +229,23 @@ public class FindPassword extends AppCompatActivity {
         });
     }
 
-    //获取8位手机短信验证码
-    private void getResetPasswordVerifyCodeByPhone(){
+    //获取6位手机短信验证码
+    private void GetLoginVerifyCode(){
         JSONObject param_getRegister = new JSONObject();
         try {
             param_getRegister.put("VerifyCode",veriCode);
             param_getRegister.put("PhoneRegionCode","+86");
-            param_getRegister.put("PhoneNumber",phone);
+            param_getRegister.put("PhoneNumber",phoneNumber);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        requestCenter.GetResetPasswordVerifyCodeByPhone(param_getRegister, new DisposeDataListener() {
+        requestCenter.getLoginVerifyCode(param_getRegister, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 //成功 没有返回
                 //跳转到短信验证码的界面
-                Intent intent = new Intent(FindPassword.this,ForgetVeriyActivity.class);
-                intent.putExtra("phoneNumber",phone);
+                Intent intent = new Intent(VerificationLogActivity.this,LoginVerifyActivity.class);
+                intent.putExtra("phone",phoneNumber);
                 intent.putExtra("verifyCode",veriCode);
                 startActivity(intent);
             }
@@ -266,5 +256,4 @@ public class FindPassword extends AppCompatActivity {
             }
         });
     }
-
 }

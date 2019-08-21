@@ -52,7 +52,7 @@ public class ChainTypeActivity extends AppCompatActivity {
     private void getList(){
         RequestParams params = new RequestParams();
         params.put("TypeId","b0d53699-dde9-e611-80e3-850a1737545e");
-        requestCenter.GetCompanyCategories(params, new DisposeDataListener() {
+        requestCenter.getCompanyCategories(params, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                String result = null;

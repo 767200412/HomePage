@@ -12,8 +12,8 @@ import javax.net.ssl.SSLSession;
 
 import comdemo.example.dell.homepagedemo.utils.log.JsonUtil;
 import comdemo.example.dell.homepagedemo.utils.log.LogUtil;
-import comdemo.example.dell.homepagedemo.utils.cookie.CookieJarImpl;
-import comdemo.example.dell.homepagedemo.utils.cookie.PersistentCookieStore;
+import comdemo.example.dell.homepagedemo.utils.okhttp.cookie.CookieJarImpl;
+import comdemo.example.dell.homepagedemo.utils.okhttp.cookie.PersistentCookieStore;
 import comdemo.example.dell.homepagedemo.utils.okhttp.https.HttpsUtils;
 import comdemo.example.dell.homepagedemo.utils.okhttp.listener.DisposeDataHandle;
 import comdemo.example.dell.homepagedemo.utils.okhttp.response.CommonJsonCallback;
@@ -109,9 +109,7 @@ public class CommonOkHttpClient {
         return call;
     }
 
-    //放回CookieStore
-
-
+    //返回CookieStore
     public PersistentCookieStore getCookieStore() {
         return cookieStore;
     }

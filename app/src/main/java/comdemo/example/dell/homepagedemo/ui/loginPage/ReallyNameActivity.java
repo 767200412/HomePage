@@ -30,7 +30,7 @@ import comdemo.example.dell.homepagedemo.ui.mainPage.MainActivity;
 import comdemo.example.dell.homepagedemo.utils.SomeMonitorEditText;
 import okhttp3.Response;
 
-public class ReallyName extends AppCompatActivity {
+public class ReallyNameActivity extends AppCompatActivity {
 
     private Button mBtnNext;
     private EditText mEtReallyName;
@@ -65,7 +65,7 @@ public class ReallyName extends AppCompatActivity {
                     //默认自动登录
                     login();
                     //进入首页
-                    Intent intent = new Intent(ReallyName.this,MainActivity.class);
+                    Intent intent = new Intent(ReallyNameActivity.this,MainActivity.class);
                     startActivity(intent);
                 }
                 else
@@ -87,7 +87,7 @@ public class ReallyName extends AppCompatActivity {
 
     //"手机号以注册过辅城" 弹窗
     private void SomeWrongDialog(){
-        myDialog=new MyDialog(ReallyName.this,R.style.MyDialog);
+        myDialog=new MyDialog(ReallyNameActivity.this,R.style.MyDialog);
         //myDialog.setTitle("警告！");
         myDialog.setMessage("该手机号以注册过辅城");
         myDialog.setYesOnclickListener("直接登录", new MyDialog.onYesOnclickListener() {
@@ -96,7 +96,7 @@ public class ReallyName extends AppCompatActivity {
                 myDialog.dismiss();
                 //跳转到登录界面
                 //进入首页
-                Intent intent = new Intent(ReallyName.this,MainLoginActivity.class);
+                Intent intent = new Intent(ReallyNameActivity.this,MainLoginActivity.class);
                 startActivity(intent);
             }
         });
@@ -145,7 +145,7 @@ public class ReallyName extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        requestCenter.Login(param_log, new DisposeDataListener() {
+        requestCenter.login(param_log, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 int code = responseObj.code();
@@ -170,7 +170,7 @@ public class ReallyName extends AppCompatActivity {
                     //步骤4：提交
                     editor.commit();
                     //登录成功 跳转到主页
-                    Intent intent = new Intent(ReallyName.this,MainActivity.class);
+                    Intent intent = new Intent(ReallyNameActivity.this,MainActivity.class);
                     startActivity(intent);
                 }
 

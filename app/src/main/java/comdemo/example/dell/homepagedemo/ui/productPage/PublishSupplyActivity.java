@@ -344,7 +344,7 @@ public class PublishSupplyActivity extends AppCompatActivity implements ClickInt
 
     //获取上传凭证
     private void getToken(){
-        requestCenter.GetToken(new DisposeDataListener() {
+        requestCenter.getToken(new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 String result = null;
@@ -396,7 +396,7 @@ public class PublishSupplyActivity extends AppCompatActivity implements ClickInt
 
     //设置标签
     private void setTab(){
-          requestCenter.GetTags(new DisposeDataListener() {
+          requestCenter.getTags(new DisposeDataListener() {
               @Override
               public void onSuccess(Response responseObj) {
                   String result = null;
@@ -453,7 +453,7 @@ public class PublishSupplyActivity extends AppCompatActivity implements ClickInt
             e.printStackTrace();
         }
 
-        requestCenter.SendMarketTalks(param, new DisposeDataListener() {
+        requestCenter.sendMarketTalks(param, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                    finish();
@@ -504,7 +504,6 @@ public class PublishSupplyActivity extends AppCompatActivity implements ClickInt
             show2.setText(selectClass);
         }
     }
-
 
     /**
      * 实现接口，获取数据

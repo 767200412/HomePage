@@ -89,8 +89,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //切换Fragment
-    private void switchFragment(int lastfragment,int index)
-    {
+    private void switchFragment(int lastfragment,int index) {
         FragmentTransaction transaction =getSupportFragmentManager().beginTransaction();
         transaction.hide(fragments[lastfragment]);//隐藏上个Fragment
         if(fragments[index].isAdded()==false)

@@ -134,7 +134,7 @@ public class NewsActivity extends AppCompatActivity {
         RequestParams params = new RequestParams();
         params.put("IsApp","false");
         params.put("fields","PlatformArticleAlbum");
-        requestCenter.GetPlatformArticleCategory(params, new DisposeDataListener() {
+        requestCenter.getPlatformArticleCategory(params, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 String result = null;
@@ -167,7 +167,7 @@ public class NewsActivity extends AppCompatActivity {
         params.put("Take",take);
         params.put("fields",fields);
         params.put("categoryid",categoryid);
-        requestCenter.GetPlatformArticles(params, new DisposeDataListener() {
+        requestCenter.getPlatformArticles(params, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                      String result = null;

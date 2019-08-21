@@ -1,4 +1,4 @@
-package comdemo.example.dell.homepagedemo.utils.cookie;
+package comdemo.example.dell.homepagedemo.utils.okhttp.cookie;
 
 import android.content.Context;
 import android.content.SharedPreferences;

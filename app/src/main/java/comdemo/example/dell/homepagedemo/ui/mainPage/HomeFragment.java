@@ -336,7 +336,7 @@ public class HomeFragment extends Fragment {
             e.printStackTrace();
         }
 
-        requestCenter.GetData(params_banner, new DisposeDataListener() {
+        requestCenter.getData(params_banner, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                          String response = null;
@@ -431,7 +431,7 @@ public class HomeFragment extends Fragment {
         }
 
 
-        requestCenter.GetData(params_banner, new DisposeDataListener() {
+        requestCenter.getData(params_banner, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 String response = null;
@@ -478,7 +478,7 @@ public class HomeFragment extends Fragment {
         }
         //Log.e("params_banner3s",String.valueOf(params_banner3));
 
-        requestCenter.GetData(params_banner3, new DisposeDataListener() {
+        requestCenter.getData(params_banner3, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 String response = null;
@@ -541,8 +541,5 @@ public class HomeFragment extends Fragment {
 
         fab.animate().translationY(0).setInterpolator(new DecelerateInterpolator(3));
     }
-
-
-
 
 }

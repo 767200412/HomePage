@@ -34,7 +34,7 @@ import comdemo.example.dell.homepagedemo.beans.Types;
 import comdemo.example.dell.homepagedemo.utils.dialog.BuyDialog;
 import comdemo.example.dell.homepagedemo.ui.showPicture.ShowImageActivity;
 
-public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
+public class ProductBuyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 
     private Context mContext;
     private List<Product> mItemList;
@@ -54,7 +54,7 @@ public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public final int LOADING_END = 3;
 
 
-    public Product_buyAdapter(Context context, List<Product> entityList){
+    public ProductBuyAdapter(Context context, List<Product> entityList){
         this.mContext = context;
         this.mItemList = entityList;
     }

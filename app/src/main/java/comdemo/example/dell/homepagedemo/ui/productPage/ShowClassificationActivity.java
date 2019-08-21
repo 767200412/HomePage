@@ -112,7 +112,7 @@ public class ShowClassificationActivity extends AppCompatActivity {
        params.put("Take",Take);
        params.put("fields",fields);
        params.put("TypeId",TypeId);
-       requestCenter.GetCompanyCategories(params, new DisposeDataListener() {
+       requestCenter.getCompanyCategories(params, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 String result = null;

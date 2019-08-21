@@ -36,7 +36,7 @@ import comdemo.example.dell.homepagedemo.utils.SomeMonitorEditText;
 import okhttp3.Response;
 
 
-public class Register extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity {
     private TextView mTvUrl;
     private TextView mTvLog;
     private Button mBtnNext;
@@ -65,7 +65,7 @@ public class Register extends AppCompatActivity {
         mTvLog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Register.this,MainLoginActivity.class);
+                Intent intent = new Intent(RegisterActivity.this,MainLoginActivity.class);
                 startActivity(intent);
             }
         });
@@ -116,7 +116,7 @@ public class Register extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(Register.this,MainActivity.class);
+                Intent intent = new Intent(RegisterActivity.this,MainActivity.class);
                 intent.putExtra(MainLoginActivity.TAG_EXIT, true);
                 startActivity(intent);
             }
@@ -147,7 +147,7 @@ public class Register extends AppCompatActivity {
     }
     //已经有账号的提示框
     private void hasAccountDialog(){
-        myDialog2=new MyDialog2(Register.this,R.style.MyDialog);
+        myDialog2=new MyDialog2(RegisterActivity.this,R.style.MyDialog);
         //myDialog.setTitle("警告！");
         myDialog2.setMessage("此账号已经注册辅城");
         myDialog2.setYesOnclickListener("确定", new MyDialog2.onYesOnclickListener() {
@@ -184,7 +184,7 @@ public class Register extends AppCompatActivity {
 
    //图形验证码弹窗
     private void veriCodeDialog(Bitmap bitmap){
-        myDialog3 = new MyDialog3(Register.this,R.style.MyDialog);
+        myDialog3 = new MyDialog3(RegisterActivity.this,R.style.MyDialog);
         myDialog3.setBitmap(bitmap);
         myDialog3.setImageOnclickListener(new MyDialog3.onImageOnclickListener(){
 
@@ -232,7 +232,7 @@ public class Register extends AppCompatActivity {
 
     //验证码是否正确
     private void veriCodeCheck(){
-        requestCenter.Verify(s, new DisposeDataListener() {
+        requestCenter.verify(s, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 String check = null;
@@ -246,14 +246,14 @@ public class Register extends AppCompatActivity {
                     //图形验证码输入正确 发送短信验证码
                     getRegisterVerifyCodeByPhone();
                     //跳转到短信验证码的界面
-                    Intent intent = new Intent(Register.this,MessageVerification.class);
+                    Intent intent = new Intent(RegisterActivity.this,MessageVerification.class);
                     intent.putExtra("phone",phoneNumber);
                     intent.putExtra("verifyCode",s);
                     startActivity(intent);
                 }
                 else if(check.equals("false")){
                     //验证码输入错误
-                    Toast.makeText(Register.this,"验证码错误，请重新输入",Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this,"验证码错误，请重新输入",Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -275,7 +275,7 @@ public class Register extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        requestCenter.GetRegisterVerifyCodeByPhone(param_getRegister, new DisposeDataListener() {
+        requestCenter.getRegisterVerifyCodeByPhone(param_getRegister, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 //成功 没有返回

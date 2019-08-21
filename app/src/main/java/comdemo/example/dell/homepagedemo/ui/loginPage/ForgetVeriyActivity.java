@@ -192,7 +192,7 @@ public class ForgetVeriyActivity extends AppCompatActivity {
 
     //图形验证码是否正确
     private void veriCodeCheck(){
-        requestCenter.ResetVerify(veriCode, new DisposeDataListener() {
+        requestCenter.resetVerify(veriCode, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 String check = null;
@@ -230,7 +230,7 @@ public class ForgetVeriyActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        requestCenter.GetResetPasswordVerifyCodeByPhone(param_getRegister, new DisposeDataListener() {
+        requestCenter.getResetPasswordVerifyCodeByPhone(param_getRegister, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 //成功 没有返回
@@ -255,7 +255,7 @@ public class ForgetVeriyActivity extends AppCompatActivity {
             e1.printStackTrace();
         }
 
-        requestCenter.CheckSendResetPasswordVerifyCodeByPhone(params_phoneVCheck, new DisposeDataListener() {
+        requestCenter.checkSendResetPasswordVerifyCodeByPhone(params_phoneVCheck, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 String result = null;
@@ -266,7 +266,7 @@ public class ForgetVeriyActivity extends AppCompatActivity {
                 }
                 if(result.equals("true")){
                     //验证正确 跳转到新密码页面
-                    Intent intent = new Intent(ForgetVeriyActivity.this,NewPassword.class);
+                    Intent intent = new Intent(ForgetVeriyActivity.this,NewPasswordActivity.class);
                     intent.putExtra("phoneVeriyCode",phoneVeriyCode);
                     intent.putExtra("phoneNumber",phoneNumber);
                     time.cancel();

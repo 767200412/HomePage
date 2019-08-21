@@ -21,7 +21,7 @@ import java.util.List;
 
 import comdemo.example.dell.homepagedemo.R;
 import comdemo.example.dell.homepagedemo.adapter.ProductAdapter;
-import comdemo.example.dell.homepagedemo.adapter.Product_buyAdapter;
+import comdemo.example.dell.homepagedemo.adapter.ProductBuyAdapter;
 import comdemo.example.dell.homepagedemo.beans.Product;
 import comdemo.example.dell.homepagedemo.utils.listener.EndlessRecyclerOnScrollListener;
 import comdemo.example.dell.homepagedemo.utils.okhttp.listener.DisposeDataListener;
@@ -55,7 +55,7 @@ public class ProductFragment extends Fragment {
     private List<Product> productList;
     private LinearLayoutManager manager = new LinearLayoutManager(getContext()); // 定义一个线性布局管理器
     private ProductAdapter adapter;
-    private Product_buyAdapter adapter2;
+    private ProductBuyAdapter adapter2;
     private RecyclerView recyclerView;
     private SwipeRefreshLayout swipeRefreshLayout;
     private String Toptab;//标签的名字
@@ -205,7 +205,7 @@ public class ProductFragment extends Fragment {
         params.put("Skip",Skip);
         params.put("Take",Take);
         params.put("fields",fields);
-        requestCenter.GetMarketTalks(params, new DisposeDataListener() {
+        requestCenter.getMarketTalks(params, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 String re = null;
@@ -235,7 +235,7 @@ public class ProductFragment extends Fragment {
         params.put("Take",Take);
         params.put("fields",fields);
         params.put("CurrIdentityId",CurrIdentityId);
-        requestCenter.GetBiddings(params, new DisposeDataListener() {
+        requestCenter.getBiddings(params, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 String re = null;
@@ -274,7 +274,7 @@ public class ProductFragment extends Fragment {
     private void showBuyMessage(){
 // 设置adapter
         if(Skip.equals("0")) {
-            adapter2 = new Product_buyAdapter(getContext(), productList);
+            adapter2 = new ProductBuyAdapter(getContext(), productList);
             recyclerView.setAdapter(adapter2);
 
         }

@@ -25,7 +25,7 @@ import comdemo.example.dell.homepagedemo.utils.dialog.MyDialog2;
 import comdemo.example.dell.homepagedemo.utils.SomeMonitorEditText;
 import okhttp3.Response;
 
-public class NewPassword extends AppCompatActivity {
+public class NewPasswordActivity extends AppCompatActivity {
     private Button mButtonLog;
     private ImageButton mImageBtn,mImageBtn2, mImageBtn3;
     private EditText mEditTextPassword,mEditTextPassword2;
@@ -107,17 +107,17 @@ public class NewPassword extends AppCompatActivity {
                           params.put("PhoneRegionCode", "+86");
                           params.put("Account", phoneNumber);
                           params.put("VerifyCode",phoneVeriyCode);
-                          params.put("NewPassword",p1);
+                          params.put("NewPasswordActivity",p1);
                           params.put("ConfirmPassword",p2);
                       } catch (JSONException e) {
                           e.printStackTrace();
                       }
 
-                      requestCenter.ResetPassword(params, new DisposeDataListener() {
+                      requestCenter.resetPassword(params, new DisposeDataListener() {
                           @Override
                           public void onSuccess(Response responseObj) {
                                   //跳转到登录界面
-                                  Intent intent = new Intent(NewPassword.this, MainLoginActivity.class);
+                                  Intent intent = new Intent(NewPasswordActivity.this, MainLoginActivity.class);
                                   startActivity(intent);
                           }
 
@@ -164,7 +164,7 @@ public class NewPassword extends AppCompatActivity {
 
     //错误弹窗
     private void wrong(String message,String button){
-        myDialog2=new MyDialog2(NewPassword.this,R.style.MyDialog);
+        myDialog2=new MyDialog2(NewPasswordActivity.this,R.style.MyDialog);
         myDialog2.setMessage(message);
         myDialog2.setYesOnclickListener(button, new MyDialog2.onYesOnclickListener() {
             @Override

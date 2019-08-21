@@ -168,7 +168,7 @@ public class MessageVerification extends AppCompatActivity implements TextWatche
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        requestCenter.GetRegisterVerifyCodeByPhone(param_getRegister, new DisposeDataListener() {
+        requestCenter.getRegisterVerifyCodeByPhone(param_getRegister, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 //成功 没有返回
@@ -192,7 +192,7 @@ public class MessageVerification extends AppCompatActivity implements TextWatche
             e1.printStackTrace();
         }
 
-        requestCenter.CheckRegisterVerifyCodeByPhone(param_checkByphone, new DisposeDataListener() {
+        requestCenter.checkRegisterVerifyCodeByPhone(param_checkByphone, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 String re = null;
@@ -204,7 +204,7 @@ public class MessageVerification extends AppCompatActivity implements TextWatche
 
                 if(re.equals("true")){
                     //跳转到设置密码
-                    Intent intent = new Intent(MessageVerification.this,Password.class);
+                    Intent intent = new Intent(MessageVerification.this,PasswordActivity.class);
                     intent.putExtra("phone",phoneNumber);
                     intent.putExtra("verifyCode",edit);
                     time.cancel();
@@ -295,7 +295,7 @@ public class MessageVerification extends AppCompatActivity implements TextWatche
 
     //验证码是否正确
     private void veriCodeCheck(){
-        requestCenter.Verify(s, new DisposeDataListener() {
+        requestCenter.verify(s, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 String check = null;

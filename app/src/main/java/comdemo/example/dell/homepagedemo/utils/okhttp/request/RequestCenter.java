@@ -75,23 +75,23 @@ public class RequestCenter {
     }
 
     //验证注册的图形验证码是否正确
-    public  static  void  Verify(String s,DisposeDataListener listener){
+    public  static  void  verify(String s,DisposeDataListener listener){
         String ss = HttpConstant.VerifyCodeCheck + s;
         RequestCenter.getRequest(ss,null,listener,null);
     }
 
     //注册  根据手机号 发送手机验证码
-    public static  void GetRegisterVerifyCodeByPhone(JSONObject params,DisposeDataListener listener){
+    public static  void getRegisterVerifyCodeByPhone(JSONObject params,DisposeDataListener listener){
         RequestCenter.postRequest(HttpConstant.GetRegisterVerifyCodeByPhone,params,listener,null);
     }
 
     //注册 验证短信验证码是否正确
-    public static void CheckRegisterVerifyCodeByPhone(JSONObject params,DisposeDataListener listener){
+    public static void checkRegisterVerifyCodeByPhone(JSONObject params,DisposeDataListener listener){
         RequestCenter.postRequest(HttpConstant.CheckRegisterVerifyCodeByPhone,params,listener,null);
     }
 
     //密码登录
-    public  static void Login(JSONObject params,DisposeDataListener listener){
+    public  static void login(JSONObject params,DisposeDataListener listener){
         RequestCenter.postRequest(HttpConstant.Login,params,listener,ResponseMessage.class);
     }
 
@@ -100,7 +100,7 @@ public class RequestCenter {
         RequestCenter.postRequest(HttpConstant.getData,params,listener, Topdata.class);
     }
 
-    public static void GetData(JSONObject params,DisposeDataListener listener){
+    public static void getData(JSONObject params,DisposeDataListener listener){
         RequestCenter.postRequest(HttpConstant.getData,params,listener, Topdata.class);
     }
 
@@ -115,23 +115,23 @@ public class RequestCenter {
     }
 
     //短信登录的验证图形验证码是否正确
-    public  static  void  LoginVerify(String s,DisposeDataListener listener){
+    public  static  void  loginVerify(String s,DisposeDataListener listener){
         String ss = HttpConstant.LoginVerifyCodeCheck + s;
         RequestCenter.getRequest(ss,null,listener,null);
     }
 
     //获取短信登录的手机验证码
-    public static void GetLoginVerifyCode(JSONObject params,DisposeDataListener listener){
+    public static void getLoginVerifyCode(JSONObject params,DisposeDataListener listener){
         RequestCenter.postRequest(HttpConstant.GetLoginVerifyCode,params,listener,null);
     }
 
     //验证短信登录的手机验证码
-    public static void CheckLoginVerifyCodeByPhone(JSONObject params,DisposeDataListener listener){
+    public static void checkLoginVerifyCodeByPhone(JSONObject params,DisposeDataListener listener){
         RequestCenter.postRequest(HttpConstant.CheckLoginVerifyCodeByPhone,params,listener,null);
     }
 
     //短信验证码登录
-    public static void LoginBySms(JSONObject params,DisposeDataListener listener){
+    public static void loginBySms(JSONObject params,DisposeDataListener listener){
         RequestCenter.postRequest(HttpConstant.LoginBySms,params,listener,null);
     }
 
@@ -146,32 +146,32 @@ public class RequestCenter {
     }
 
     //验证图形验证码是否正确
-    public  static  void  ResetVerify(String s,DisposeDataListener listener){
+    public  static  void  resetVerify(String s,DisposeDataListener listener){
         String ss = HttpConstant.CheckResetPasswordVerifyCodeByPhone + s;
         RequestCenter.getRequest(ss,null,listener,null);
     }
 
     //根据手机号 发送找回密码的手机验证码
-    public static  void GetResetPasswordVerifyCodeByPhone(JSONObject params,DisposeDataListener listener){
+    public static  void getResetPasswordVerifyCodeByPhone(JSONObject params,DisposeDataListener listener){
         RequestCenter.postRequest(HttpConstant.SendResetPasswordVerifyCodeByPhone,params,listener,null);
     }
 
     //根据手机号 验证找回密码的手机验证码
-    public static  void CheckSendResetPasswordVerifyCodeByPhone(JSONObject params,DisposeDataListener listener){
+    public static  void checkSendResetPasswordVerifyCodeByPhone(JSONObject params,DisposeDataListener listener){
         RequestCenter.postRequest(HttpConstant.CheckSendResetPasswordVerifyCodeByPhone,params,listener,null);
     }
 
     //重置密码
-    public static void ResetPassword(JSONObject params,DisposeDataListener listener){
+    public static void resetPassword(JSONObject params,DisposeDataListener listener){
         RequestCenter.postRequest(HttpConstant.ResetPassword,params,listener,null);
     }
 
     //获取新闻标签
-    public static void GetPlatformArticleCategory(RequestParams params,DisposeDataListener listener){
+    public static void getPlatformArticleCategory(RequestParams params,DisposeDataListener listener){
         RequestCenter.getRequest(HttpConstant.GetPlatformArticleCategory,params,listener,null);
     }
 
-    public static void GetPlatformArticles(RequestParams params,DisposeDataListener listener){
+    public static void getPlatformArticles(RequestParams params,DisposeDataListener listener){
         RequestCenter.getRequest(HttpConstant.GetPlatformArticles,params,listener,null);
     }
 
@@ -180,26 +180,26 @@ public class RequestCenter {
     */
 
     //获取供应信息列表
-    public static void GetMarketTalks(RequestParams params,DisposeDataListener listener){
+    public static void getMarketTalks(RequestParams params,DisposeDataListener listener){
         RequestCenter.getRequest(HttpConstant.GetMarketTalks,params,listener,null);
     }
     //获取产品分类信息
-    public static void GetCompanyCategories(RequestParams params,DisposeDataListener listener){
+    public static void getCompanyCategories(RequestParams params,DisposeDataListener listener){
         RequestCenter.getRequest(HttpConstant.GetCompanyCategories,params,listener,null);
     }
 
     //获取求购信息列表
-    public static  void GetBiddings(RequestParams params,DisposeDataListener listener){
+    public static  void getBiddings(RequestParams params,DisposeDataListener listener){
         RequestCenter.getRequest(HttpConstant.GetBiddings,params,listener,null);
     }
 
     //获取 七牛上传凭证
-    public static void GetToken(DisposeDataListener listener){
+    public static void getToken(DisposeDataListener listener){
         RequestCenter.getRequest(HttpConstant.GetToken,null,listener,null);
     }
 
     //获取类别标签
-    public static void GetTags(DisposeDataListener listener){
+    public static void getTags(DisposeDataListener listener){
         RequestCenter.getRequest(HttpConstant.GetTags,null,listener,null);
     }
 //    //获取供应链
@@ -208,7 +208,7 @@ public class RequestCenter {
 //    }
 
     //发布供应信息
-    public static void SendMarketTalks(JSONObject params,DisposeDataListener listener){
+    public static void sendMarketTalks(JSONObject params,DisposeDataListener listener){
         RequestCenter.postRequest(HttpConstant.GetMarketTalks,params,listener,null);
     }
 

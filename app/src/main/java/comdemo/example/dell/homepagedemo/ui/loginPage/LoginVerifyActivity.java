@@ -250,7 +250,7 @@ public class LoginVerifyActivity extends AppCompatActivity implements TextWatche
 
     //验证码是否正确
     private void veriCodeCheck(){
-        requestCenter.LoginVerify(veriCode, new DisposeDataListener() {
+        requestCenter.loginVerify(veriCode, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 String check = null;
@@ -288,7 +288,7 @@ public class LoginVerifyActivity extends AppCompatActivity implements TextWatche
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        requestCenter.GetLoginVerifyCode(param_getRegister, new DisposeDataListener() {
+        requestCenter.getLoginVerifyCode(param_getRegister, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 //成功 没有返回
@@ -312,7 +312,7 @@ public class LoginVerifyActivity extends AppCompatActivity implements TextWatche
             e1.printStackTrace();
         }
 
-        requestCenter.CheckLoginVerifyCodeByPhone(param_checkByphone, new DisposeDataListener() {
+        requestCenter.checkLoginVerifyCodeByPhone(param_checkByphone, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 String re = null;
@@ -350,7 +350,7 @@ public class LoginVerifyActivity extends AppCompatActivity implements TextWatche
             e.printStackTrace();
         }
 
-        requestCenter.LoginBySms(parms, new DisposeDataListener() {
+        requestCenter.loginBySms(parms, new DisposeDataListener() {
             @Override
             public void onSuccess(Response responseObj) {
                 String re = null;

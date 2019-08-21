@@ -72,7 +72,6 @@ public class PhotoGridViewAdapter extends android.widget.BaseAdapter {
         return convertView;
     }
 
-
     //静态内部类
     public static class CallBackData{
         private static ClickInterface mClickInterface;//定义的接口
