@@ -23,11 +23,11 @@ import comdemo.example.dell.homepagedemo.R;
 import comdemo.example.dell.homepagedemo.adapter.ProductAdapter;
 import comdemo.example.dell.homepagedemo.adapter.Product_buyAdapter;
 import comdemo.example.dell.homepagedemo.beans.Product;
-import comdemo.example.dell.homepagedemo.listener.EndlessRecyclerOnScrollListener;
-import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
-import comdemo.example.dell.homepagedemo.okhttp.request.RequestParams;
-import comdemo.example.dell.homepagedemo.request.RequestCenter;
-import comdemo.example.dell.homepagedemo.ui.dialog.BuyDialog;
+import comdemo.example.dell.homepagedemo.utils.listener.EndlessRecyclerOnScrollListener;
+import comdemo.example.dell.homepagedemo.utils.okhttp.listener.DisposeDataListener;
+import comdemo.example.dell.homepagedemo.utils.okhttp.request.RequestParams;
+import comdemo.example.dell.homepagedemo.utils.okhttp.request.RequestCenter;
+import comdemo.example.dell.homepagedemo.utils.dialog.BuyDialog;
 import okhttp3.Response;
 
 /**

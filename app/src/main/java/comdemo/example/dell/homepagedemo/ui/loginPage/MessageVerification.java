@@ -23,10 +23,10 @@ import java.io.IOException;
 
 import comdemo.example.dell.homepagedemo.R;
 import comdemo.example.dell.homepagedemo.beans.ResponseMessage;
-import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
-import comdemo.example.dell.homepagedemo.request.RequestCenter;
-import comdemo.example.dell.homepagedemo.ui.dialog.MyDialog2;
-import comdemo.example.dell.homepagedemo.ui.dialog.MyDialog3;
+import comdemo.example.dell.homepagedemo.utils.okhttp.listener.DisposeDataListener;
+import comdemo.example.dell.homepagedemo.utils.okhttp.request.RequestCenter;
+import comdemo.example.dell.homepagedemo.utils.dialog.MyDialog2;
+import comdemo.example.dell.homepagedemo.utils.dialog.MyDialog3;
 import okhttp3.Response;
 
 public class MessageVerification extends AppCompatActivity implements TextWatcher {

@@ -1,4 +1,4 @@
-package comdemo.example.dell.homepagedemo.cookie;
+package comdemo.example.dell.homepagedemo.utils.cookie;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

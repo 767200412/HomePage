@@ -18,10 +18,10 @@ import comdemo.example.dell.homepagedemo.R;
 import comdemo.example.dell.homepagedemo.adapter.NewsAdapter;
 import comdemo.example.dell.homepagedemo.beans.News;
 import comdemo.example.dell.homepagedemo.beans.NewsTab;
-import comdemo.example.dell.homepagedemo.listener.EndlessRecyclerOnScrollListener;
-import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
-import comdemo.example.dell.homepagedemo.okhttp.request.RequestParams;
-import comdemo.example.dell.homepagedemo.request.RequestCenter;
+import comdemo.example.dell.homepagedemo.utils.listener.EndlessRecyclerOnScrollListener;
+import comdemo.example.dell.homepagedemo.utils.okhttp.listener.DisposeDataListener;
+import comdemo.example.dell.homepagedemo.utils.okhttp.request.RequestParams;
+import comdemo.example.dell.homepagedemo.utils.okhttp.request.RequestCenter;
 import okhttp3.Response;
 
 public class NewsActivity extends AppCompatActivity {

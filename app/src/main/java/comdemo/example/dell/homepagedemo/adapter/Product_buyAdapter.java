@@ -31,8 +31,8 @@ import comdemo.example.dell.homepagedemo.beans.Company;
 import comdemo.example.dell.homepagedemo.beans.Images;
 import comdemo.example.dell.homepagedemo.beans.Product;
 import comdemo.example.dell.homepagedemo.beans.Types;
-import comdemo.example.dell.homepagedemo.ui.dialog.BuyDialog;
-import comdemo.example.dell.homepagedemo.ui.utils.ShowImageActivity;
+import comdemo.example.dell.homepagedemo.utils.dialog.BuyDialog;
+import comdemo.example.dell.homepagedemo.ui.showPicture.ShowImageActivity;
 
 public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
 

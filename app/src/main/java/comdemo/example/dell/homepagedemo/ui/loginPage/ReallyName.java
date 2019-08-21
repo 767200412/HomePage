@@ -23,9 +23,9 @@ import java.io.IOException;
 
 import comdemo.example.dell.homepagedemo.R;
 import comdemo.example.dell.homepagedemo.beans.ResponseMessage;
-import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
-import comdemo.example.dell.homepagedemo.request.RequestCenter;
-import comdemo.example.dell.homepagedemo.ui.dialog.MyDialog;
+import comdemo.example.dell.homepagedemo.utils.okhttp.listener.DisposeDataListener;
+import comdemo.example.dell.homepagedemo.utils.okhttp.request.RequestCenter;
+import comdemo.example.dell.homepagedemo.utils.dialog.MyDialog;
 import comdemo.example.dell.homepagedemo.ui.mainPage.MainActivity;
 import comdemo.example.dell.homepagedemo.utils.SomeMonitorEditText;
 import okhttp3.Response;

@@ -1,4 +1,4 @@
-package comdemo.example.dell.homepagedemo.ui.utils;
+package comdemo.example.dell.homepagedemo.ui.showPicture;
 
 import android.content.Intent;
 import android.os.Bundle;

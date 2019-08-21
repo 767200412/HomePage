@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import comdemo.example.dell.homepagedemo.BuildConfig;
 import comdemo.example.dell.homepagedemo.R;
-import comdemo.example.dell.homepagedemo.log.LogUtil;
+import comdemo.example.dell.homepagedemo.utils.log.LogUtil;
 import comdemo.example.dell.homepagedemo.ui.productPage.ProductFragment;
 
 public class MainActivity extends AppCompatActivity {

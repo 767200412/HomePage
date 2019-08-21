@@ -1,4 +1,4 @@
-package comdemo.example.dell.homepagedemo.log;
+package comdemo.example.dell.homepagedemo.utils.log;
 
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;

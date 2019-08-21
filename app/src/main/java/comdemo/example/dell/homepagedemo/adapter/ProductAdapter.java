@@ -26,7 +26,7 @@ import comdemo.example.dell.homepagedemo.beans.Company;
 import comdemo.example.dell.homepagedemo.beans.Images;
 import comdemo.example.dell.homepagedemo.beans.Product;
 import comdemo.example.dell.homepagedemo.beans.Tags;
-import comdemo.example.dell.homepagedemo.ui.utils.ShowImageActivity;
+import comdemo.example.dell.homepagedemo.ui.showPicture.ShowImageActivity;
 
 public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

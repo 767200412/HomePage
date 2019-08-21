@@ -1,4 +1,4 @@
-package comdemo.example.dell.homepagedemo.ui.utils;
+package comdemo.example.dell.homepagedemo.ui.showPicture;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import comdemo.example.dell.homepagedemo.R;
 import comdemo.example.dell.homepagedemo.adapter.ViewPagerAdapter;
 import comdemo.example.dell.homepagedemo.constant.NumberConstant;
-import comdemo.example.dell.homepagedemo.ui.dialog.CancelOrOkDialog;
+import comdemo.example.dell.homepagedemo.utils.dialog.*;
 
 public class PlusImageActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
 

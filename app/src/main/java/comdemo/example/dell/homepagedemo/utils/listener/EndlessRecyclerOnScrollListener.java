@@ -1,4 +1,4 @@
-package comdemo.example.dell.homepagedemo.listener;
+package comdemo.example.dell.homepagedemo.utils.listener;
 
 import android.support.v7.widget.RecyclerView;
 

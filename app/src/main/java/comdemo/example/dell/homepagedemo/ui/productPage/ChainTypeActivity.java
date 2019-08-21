@@ -20,9 +20,9 @@ import java.util.List;
 
 import comdemo.example.dell.homepagedemo.R;
 import comdemo.example.dell.homepagedemo.beans.ChainResponse;
-import comdemo.example.dell.homepagedemo.okhttp.listener.DisposeDataListener;
-import comdemo.example.dell.homepagedemo.okhttp.request.RequestParams;
-import comdemo.example.dell.homepagedemo.request.RequestCenter;
+import comdemo.example.dell.homepagedemo.utils.okhttp.listener.DisposeDataListener;
+import comdemo.example.dell.homepagedemo.utils.okhttp.request.RequestParams;
+import comdemo.example.dell.homepagedemo.utils.okhttp.request.RequestCenter;
 import okhttp3.Response;
 
 public class ChainTypeActivity extends AppCompatActivity {

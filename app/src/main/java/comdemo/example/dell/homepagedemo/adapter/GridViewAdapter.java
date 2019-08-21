@@ -21,7 +21,7 @@ import java.util.List;
 
 import comdemo.example.dell.homepagedemo.R;
 import comdemo.example.dell.homepagedemo.beans.Images;
-import comdemo.example.dell.homepagedemo.ui.utils.ShowImageActivity;
+import comdemo.example.dell.homepagedemo.ui.showPicture.ShowImageActivity;
 
 public class GridViewAdapter extends BaseAdapter {
 
