@@ -143,6 +143,8 @@ public class Product_buyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             //图片展示
             List<Images> images = product.getImages();
+            //清除上一次的遗留
+            recycleviewViewHolder.linearLayout.removeAllViews();
             for(final Images image:images){
                 Log.d("ProductBuyAdapter1",image.getImgUri());
                 recycleviewViewHolder.Lsview = LayoutInflater.from(mContext).inflate(R.layout.image_show, null);

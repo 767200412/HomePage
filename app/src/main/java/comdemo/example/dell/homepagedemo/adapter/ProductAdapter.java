@@ -134,6 +134,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             //图片显示
             List<Images> images = product.getImages();
+            recycleviewViewHolder.linearLayout.removeAllViews();
             for(final Images image:images) {
                 ((RecycleviewViewHolder) holder).Lsview = LayoutInflater.from(mContext).inflate(R.layout.image_show, null);
                 ((RecycleviewViewHolder) holder).image_show = ((RecycleviewViewHolder) holder).Lsview.findViewById(R.id.image_show);
